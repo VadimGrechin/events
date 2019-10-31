@@ -1,8 +1,10 @@
 <template>
-		<div class="registration-form">
+	<div class="registration-layout">
 		<!-- Информация о событии -->
 		<div>
-			Event
+			Event: {{eventInfo.eventTitle}}
+			<br>
+			Event date: {{eventInfo.eventDate}}
 		</div>
 		<!-- форма регистрации -->
 		<div>
@@ -13,10 +15,16 @@
 
 <script>
 export default {
-
+	name: 'registration-form',
+	props: {
+		eventInfo: Object
+	}
 }
 </script>
 
 <style>
-
+.registration-layout {
+	display: flex;
+	flex-direction: row;
+}
 </style>

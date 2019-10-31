@@ -1,9 +1,9 @@
 <template>
 	<div class="registration-layout">
 		<!-- Регистрация -->
-		<RegistrationForm v-if="goRegistration"></RegistrationForm>
+		<registration-form v-if="goRegistration" :eventInfo="eventInfo"></registration-form>
 		<!-- сообщение -->
-		<Message v-if="showMessage" :message="message"></Message>
+		<message v-if="showMessage" :message="message"></message>
 	</div>
 </template>
 
@@ -26,7 +26,8 @@ export default {
 			},
 			goRegistration: false,
 			showMessage: false,
-			message: ''
+			message: '',
+			eventInfo: null
 		}
 	},
 	created() {
@@ -57,6 +58,7 @@ export default {
 			default:
 				this.showMessage = false
 				this.goRegistration = true
+				this.eventInfo = this.getEventInfo(this.params.eventid)
 		}
 	},
 	methods: {
@@ -83,7 +85,18 @@ export default {
 			}
 			// Сущесвования события и факт регистрации персоны: запросы к веб-расчетам
 			
+		},
+		getEventInfo(eventid) {
+			return {
+				id: eventid,
+				eventTitle: 'Вебинар',
+				eventDate: '2019-12-31',
+				eventDesriprion: 'Будет по-новогоднему весело!'
+			}
 		}
+	},
+	computed: {
+
 	}
 }
 </script>
