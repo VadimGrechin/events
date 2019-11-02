@@ -17,7 +17,28 @@
 export default {
 	name: 'registration-form',
 	props: {
-		eventInfo: Object
+		eventInfo: Object,
+		idparams: Object
+	},
+	data() {
+		return {
+			registrationData: {
+				eventid: idparams.eventGuid,
+				personid: idparams.personGuid,
+				name: '',
+				surname: '',
+				email: '',
+				company: '',
+				phone: '',
+				companyemployeesqty: ''
+			}
+		}
+	},
+	methods: {
+		// Сохранить регистрационные данные
+		saveRegistrationData() {
+			
+		}
 	}
 }
 </script>

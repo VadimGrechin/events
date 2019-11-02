@@ -1,7 +1,13 @@
 <template>
 	<div class="registration-layout">
+		<!-- Название события -->
+		<div v-if="eventInfo">
+			<h2>Регистрация: {{eventInfo.eventTitle}}</h2>
+		</div>
 		<!-- Регистрация -->
-		<registration-form v-if="goRegistration" :eventInfo="eventInfo"></registration-form>
+		<registration-form v-if="goRegistration" 
+											:eventInfo="eventInfo"
+											:idparams="params"></registration-form>
 		<!-- сообщение -->
 		<message v-if="showMessage" :message="message"></message>
 	</div>
@@ -24,6 +30,8 @@ export default {
 				eventid: null,
 				personid: null
 			},
+			error: null,
+			errorMessage: null,
 			goRegistration: false,
 			showMessage: false,
 			message: '',
@@ -53,12 +61,17 @@ export default {
 			case 'firstparamnotcorrect':
 				this.message = 'Первый параметр в ссылке не корректен!'
 				break;
-			// case '':
-			// 	break;
-			default:
+			case 'eventnotfaund':
+				this.message = 'Ссылка не связана ни с одним из событий!'
+				break;
+			case 'personhasregistration':
+				this.message = 'Вы уже зарегистрированы на событие!'
+				break;
+			case 'ok':
 				this.showMessage = false
 				this.goRegistration = true
-				this.eventInfo = this.getEventInfo(this.params.eventid)
+				break;
+			default: break;
 		}
 	},
 	methods: {
@@ -84,15 +97,37 @@ export default {
 				return 'firstparamnotcorrect'
 			}
 			// Сущесвования события и факт регистрации персоны: запросы к веб-расчетам
-			
+			this.eventInfo = this.getEventInfo(this.params.eventid)
+			if (!this.eventInfo) {
+				return 'eventnotfaund'
+			}
+			var isRegistered = this.hasRegistered(this.params.personid)
+			if (isRegistered) {
+				return 'personhasregistration'
+			}
+			return 'ok'
 		},
 		getEventInfo(eventid) {
-			return {
-				id: eventid,
-				eventTitle: 'Вебинар',
-				eventDate: '2019-12-31',
-				eventDesriprion: 'Будет по-новогоднему весело!'
+			// Вызвать веб-расчет _REGFORM.GETEVENTINFO
+
+			if (eventid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
+				return {
+					eventTitle: 'Вебинар',
+					eventDate: '2019-12-31',
+					eventDesriprion: 'Будет по-новогоднему весело!'
+				}
+			} else {
+				return null
 			}
+			
+		},
+		hasRegistered ( personid ) {
+			if (personid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
+				return true
+			} else {
+				return false
+			}
+			
 		}
 	},
 	computed: {
