@@ -8,7 +8,43 @@
 		</div>
 		<!-- форма регистрации -->
 		<div>
-			Форма регистрации
+			<v-form
+						ref=form
+						v-model="valid"
+						:lazy-validation="lazy">
+				<!-- Поля -->
+				<v-text-field
+						v-model="registrationData.name"
+						:rules="nameRules"
+						label="Имя"
+						required></v-text-field>
+
+				<v-text-field
+						v-model="registrationData.surname"
+						:rules="nameRules"
+						label="Фамилия"></v-text-field>
+				
+				<v-text-field
+						v-model="registrationData.email"
+						:rules="emailRules"
+						label="e-mail"
+						required></v-text-field>
+
+				<v-text-field
+						v-model="registrationData.company"
+						label="Компания"></v-text-field>
+				
+				<v-text-field
+						v-model="registrationData.phone"
+						:rules="phoneRules"
+						label="Компания"></v-text-field>
+
+				<v-select
+						v-model="registrationData.companyemployeesqty"
+						:items="items"
+						labels="Сотрудников в компании"></v-select>
+
+			</v-form>
 		</div>
 	</div>
 </template>
@@ -22,6 +58,13 @@ export default {
 	},
 	data() {
 		return {
+			valid: true,
+			lazy: true,
+			nameRules: [],
+			emailRules:[],
+			phoneRules:[],
+			items: [],
+			
 			registrationData: {
 				eventid: idparams.eventGuid,
 				personid: idparams.personGuid,
