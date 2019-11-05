@@ -72,10 +72,6 @@ export default {
 	components: {
 		Message
 	},
-	mounted() {
-		// this.registrationData.eventid = this.idparams.eventid
-		// this.registrationData.personid = this.idparams.personid
-	},
 	data: () => ({
 			valid: true,
 			lazy: false,
@@ -98,8 +94,6 @@ export default {
 			],
 			
 			registrationData: {
-				// eventid: '',
-				// personid: '',
 				name: '',
 				surname: '',
 				email: '',
@@ -123,9 +117,7 @@ export default {
 			var params = JSON.stringify({ 
 				eventGuid: this.idparams.eventid,
 				personGuid: this.idparams.personid,
-				data: this.registrationData})
-
-			alert(params)
+				personData: this.registrationData})
 
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.SAVEREGISTRATIONDATA',
