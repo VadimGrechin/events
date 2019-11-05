@@ -2,18 +2,11 @@
 	<v-container>
 		<v-layout wrap justify-space-between>
 			<v-flex md5 xs12>
-				<v-card class="text-word-wrap">
+				<v-card>
 					<!-- Информация о событии -->
 					<v-card-title primary title>
-						<div class="headline">
-							Event Title: {{eventInfo.eventTitle}}
-						</div>
+						<div v-html="eventInfo.eventDescription"></div>
 					</v-card-title>
-					<v-card-text>
-						<p class="font-weight-bold">Event date: {{eventInfo.eventDate}}</p>
-						<p class="font-weight-bold">Event time: {{eventInfo.eventTime}}</p>
-						<p>{{eventInfo.eventDescription}}</p>
-					</v-card-text>
 				</v-card>
 			</v-flex>
 			<v-flex md6 xs12 >
@@ -24,31 +17,28 @@
 							:lazy-validation="lazy">
 					<!-- Поля -->
 					<v-text-field
-							v-model="registrationData.name"
-							:rules="[rules.required, rules.name, rules.length]"
-							label="Имя"
-							required></v-text-field>
+						v-model="registrationData.name"
+						:rules="[rules.required, rules.name, rules.length]"
+						label="Имя"
+						required></v-text-field>
 					<v-text-field
-							v-model="registrationData.surname"
-							:rules="[rules.length]"
-							label="Фамилия"></v-text-field>
+						v-model="registrationData.surname"
+						:rules="[rules.length]"
+						label="Фамилия"></v-text-field>
 					<v-text-field
-							v-model="registrationData.email"
-							:rules="[rules.required, rules.email]"
-							label="e-mail"
-							required></v-text-field>
+						v-model="registrationData.email"
+						:rules="[rules.required, rules.email]"
+						label="e-mail"
+						required></v-text-field>
 					<v-text-field
-							v-model="registrationData.company"
-							:rules="[rules.company, rules.length]"
-							label="Компания"></v-text-field>
+						v-model="registrationData.company"
+						:rules="[rules.company, rules.length]"
+						label="Компания"></v-text-field>
 					<v-text-field
-							v-model="registrationData.phone"
-							:rules="[rules.phone]"
-							label="Телефон"></v-text-field>
-					<v-select
-							v-model="registrationData.companyemployeesqty"
-							:items="items"
-							labels="Сотрудников в компании"></v-select>
+						v-model="registrationData.phone"
+						:rules="[rules.phone]"
+						label="Телефон"></v-text-field>
+					
 					<v-btn
 							:disabled="!valid"
 							color="success"
@@ -63,15 +53,24 @@
 </template>
 
 <script>
-
 import axios from 'axios'
 import Message from '../components/Message'
 
 export default {
 	name: 'registration-form',
-	props: [ 'eventInfo', 'idparams' ],
+	props: [ 'eventInfo', 'personInfo', 'idparams' ],
 	components: {
 		Message
+	},
+	mounted() {
+		// Если есть персональные данные заполнить форму
+		if (this.personInfo) {
+			this.registrationData.name = this.personInfo.name
+			this.registrationData.surname = this.personInfo.surname
+			this.registrationData.email = this.personInfo.email
+			this.registrationData.company = this.personInfo.company
+			this.registrationData.phone = this.personInfo.phone
+		}
 	},
 	data: () => ({
 			valid: true,
@@ -87,20 +86,13 @@ export default {
 				company: v => (/[a-zA-zА-Яа-яЁё.\s]/.test(v) || !v) || "",
 				length: v => (v && v.length <= 50 || !v) || "Количество символов превышает 50"
 			},
-			items: [
-				'1-100',
-				'100 - 1000',
-				'1000 - 5000',
-				'5000 - 10000'
-			],
 			
 			registrationData: {
 				name: '',
 				surname: '',
 				email: '',
 				company: '',
-				phone: '',
-				companyemployeesqty: ''
+				phone: ''
 			},
 			message: ''
 	}) ,
@@ -113,7 +105,7 @@ export default {
 			this.saveRegistrationData()
 		},
 
-		// Вызвать веб-расчет _REGFORM.SAVEREGISTRATIONDATA 
+		// Вызвать веб-расчет _REGFORM.SAVEREGISTRATIONDATA
 		saveRegistrationData() {
 			var params = JSON.stringify({ 
 				eventGuid: this.idparams.eventid,
@@ -145,7 +137,7 @@ export default {
 					}
 			})
 		}
-	}
+	},
 }
 </script>
 

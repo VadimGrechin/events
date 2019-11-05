@@ -3,17 +3,14 @@
 		<v-layout column>
 			<!-- Название события -->
 			<v-flex xs-12 v-if="eventInfo">
-				<v-card flat>
-					<v-card-text>
-						<h2 class="text-md-center text-sm-center text-xs-center">
-								Регистрация: {{eventInfo.eventTitle}}</h2>
-					</v-card-text>
-				</v-card>
+				<h2 class="text-md-center text-sm-center text-xs-center grey--text text--darken-2">
+					{{eventInfo.eventTitle}}</h2>
 			</v-flex>
 			<v-layout my-1 row>
 				<!-- Регистрация -->
-				<registration-form v-if="goRegistration && eventInfo" 
+				<registration-form v-if="goRegistration && eventInfo && personInfoComp !== undefined" 
 												:event-info="eventInfo"
+												:person-info="personInfoComp"
 												:idparams="params"></registration-form>
 				<!-- сообщение/ сообщение об ошибке -->
 				<message v-if="showMessage" :message="message"></message>
@@ -46,7 +43,9 @@ export default {
 			showMessage: false,
 			message: '',
 			eventInfo: null,
-			isRegistered: false
+			personInfo: undefined,
+			isRegistered: false,
+			skipRegistrationCheck: false
 		}
 	},
 	created() {
@@ -60,8 +59,8 @@ export default {
 			case 'noparams':
 				this.message = 'В ссылке нет параметров!'
 				break;
-			case 'nosecondparams':
-				this.message = 'В ссылке нет второго параметра!'
+			case 'parameternotcorrect':
+				this.message = 'Параметр в ссылке некорректен!'
 				break;
 			case 'bothparamsnotcorrect':
 				this.message = 'Параметры в ссылке некорректны!'
@@ -72,44 +71,58 @@ export default {
 			case 'firstparamnotcorrect':
 				this.message = 'Первый параметр в ссылке не корректен!'
 				break;
+			case 'nosecondparams':
+				this.showMessage = false
+				this.goRegistration = true
+				this.skipRegistrationCheck = true
+				this.personInfo = null
+				break;
 			case 'ok':
 				this.showMessage = false
 				this.goRegistration = true
 				break;
 			default: break;
 		}
-	},
-
-	mounted() {
 		if(!this.showMessage) {
 			this.getEventInfo(this.params.eventid)
 		}
 	},
+
+	mounted() {
+	},
 	methods: {
 		// Проверить параметры строки запроса
 		checkParams(params) {
-			// Наличие параметров
+			// Наличие параметров и корректность параметров
+			var eventidIsCorrect = false
+			var personidIsCorrect  = false
 			if (!params.eventid && !params.personid) {
 				return 'noparams'
 			}
 			if (params.eventid && !params.personid) {
-				return 'nosecondparams'
+				eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.eventid)
+				if (eventidIsCorrect) {
+					return 'nosecondparams'
+				} else {
+					return 'parameternotcorrect' 
+				}
 			}
-			// корректность параметров 
-			var eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.eventid)
-			var personidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.personid)
+			
+			eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.eventid)
+			personidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.personid)
+			
 			if (!eventidIsCorrect && !personidIsCorrect) {
 				return 'bothparamsnotcorrect'
-			}
-			if (eventidIsCorrect && !personidIsCorrect) {
-				return 'secondparamnotcorrect'
 			}
 			if (!eventidIsCorrect && personidIsCorrect) {
 				return 'firstparamnotcorrect'
 			}
+			if (eventidIsCorrect && !personidIsCorrect) {
+				return 'secondparamnotcorrect'
+			}
 			return 'ok'
 		},
-		// Вызвать веб-расчет _REGFORM.GETEVENTINFO
+		// Получить информция о событии _REGFORM.GETEVENTINFO
 		getEventInfo(eventid) {
 			axios.post(window.myConfig.WsUrl, {
 				calcId: "_REGFORM.GETEVENTINFO",
@@ -121,7 +134,9 @@ export default {
 				if (this.eventInfo) {
 					this.goRegistration = true
 					this.showMessage = false
-					this.hasRegistered(this.params.eventid, this.params.personid)
+					if (!this.skipRegistrationCheck) {
+						this.hasRegistered(this.params.eventid, this.params.personid)
+					}
 				} else {
 					this.goRegistration = false
 					this.showMessage = true
@@ -152,11 +167,16 @@ export default {
 				ticket: ''
 			})
 			.then( response => {
-				this.isRegistered = response.data.d === 'True' ? true : false
+				// aeslint-disable-next-line
+				//debugger
+				this.personInfo = JSON.parse(response.data.d)
+				this.isRegistered = this.personInfo.isRegistered
+				//this.isRegistered = response.data.d === 'True' ? true : false
 				if(this.isRegistered) {
 					this.goRegistration = false
 					this.showMessage = true
 					this.message = 'Вы уже зарегистрированы!'
+					this.personInfo = null
 				} else {
 					this.goRegistration = true
 					this.showMessage = false
@@ -176,7 +196,7 @@ export default {
 						this.message = error.message
 					}
 			})
-		}
+		},
 	},
 	computed: {
 		eventInfoData() {
@@ -184,11 +204,21 @@ export default {
 		},
 		goToRegistration() {
 			return this.goRegistration
+		},
+		personInfoComp() {
+			// if(!this.personInfo) {
+			// 	return {
+
+			// 	}
+			// }
+			return this.personInfo
 		}
 	}
 }
 </script>
 
 <style>
-
+.light-gray-color {
+	background: #fafafa
+}
 </style>
