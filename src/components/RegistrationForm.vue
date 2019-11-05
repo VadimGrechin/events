@@ -35,12 +35,22 @@
 						:rules="[rules.company, rules.length]"
 						label="Компания"></v-text-field>
 					<v-text-field
+						v-model="registrationData.position"
+						:rules="[rules.name, rules.length]"
+						label="Должность"></v-text-field>
+					<v-text-field
 						v-model="registrationData.phone"
 						:rules="[rules.phone]"
 						label="Телефон"></v-text-field>
 					
+					<!-- Согласие на использование данных -->
+					<v-checkbox
+						v-model="isConsent"
+						label="Согласны на обработку персональных данных">
+					</v-checkbox>
+
 					<v-btn
-							:disabled="!valid"
+							:disabled="!valid && !isConsent"
 							color="success"
 							@click="validate">Зарегистрироваться</v-btn>
 				</v-form>
@@ -69,6 +79,7 @@ export default {
 			this.registrationData.surname = this.personInfo.surname
 			this.registrationData.email = this.personInfo.email
 			this.registrationData.company = this.personInfo.company
+			this.registrationData.position = this.personInfo.position
 			this.registrationData.phone = this.personInfo.phone
 		}
 	},
@@ -92,8 +103,10 @@ export default {
 				surname: '',
 				email: '',
 				company: '',
-				phone: ''
+				phone: '',
+				position: ''
 			},
+			isConsent: false,
 			message: ''
 	}) ,
 	methods: {
