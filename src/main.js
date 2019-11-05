@@ -5,7 +5,10 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 
 import Registration from './views/Registration.vue'
-import ErrorMessage from './views/ErrorMessage.vue'
+import ErrorPage from './views/ErrorPage.vue'
+import Ws from './api/webCalculation.js'
+
+Vue.mixin(Ws)
 
 Vue.use(VueRouter)
 
@@ -28,7 +31,7 @@ const routes = [
   {
     path: '*',
     name: 'notvalidlink',
-    component: ErrorMessage,
+    component: ErrorPage,
   }
 ]
 

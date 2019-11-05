@@ -1,7 +1,11 @@
 <template>
-	<div>
-		<h1>{{message}}</h1>
-	</div>
+	<v-container fluid>
+		<v-card >
+			<v-layout align-center justify-end column fill-height>
+				<h2 class="text-xs-center">{{message}}</h2>
+			</v-layout>
+		</v-card>
+	</v-container>
 </template>
 
 <script>

@@ -3,12 +3,16 @@ import axios from 'axios'
 export default {
 	methods: {
 		runCalculation(params) {
-			axios.defaults.withCredentials = true;
+			/// eslint-disable-next-line
+			// debugger
+			// axios.default.withCredentials = true;
+			// url: "https://m.it.ua/ws/WebService.asmx/Execute"
 			axios({
 				method: "post",
-				url: "https://m.it.ua/ws/webCalc/Execute",
+				url: window.myConfig.WsUrl,
+				headers: {'content-type': 'application/json'},
 				data: {
-					calcId: params.serviceName,
+					calcId: params.serviceName, //"_REGFORM.GETEVENTINFO",
 					args: JSON.stringify(params.parameters),
 					ticket: ""
 				}

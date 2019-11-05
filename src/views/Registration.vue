@@ -5,21 +5,23 @@
 			<h2>Регистрация: {{eventInfo.eventTitle}}</h2>
 		</div>
 		<!-- Регистрация -->
-		<registration-form v-if="goRegistration" 
-											:eventInfo="eventInfo"
+		<registration-form v-if="goToRegistration && eventInfoData" 
+											:event-info="eventInfo"
 											:idparams="params"></registration-form>
-		<!-- сообщение -->
+		<!-- сообщение/ сообщение об ошибке -->
 		<message v-if="showMessage" :message="message"></message>
+		
 	</div>
 </template>
 
 <script>
 
+import axios from 'axios'
 import RegistrationForm from '../components/RegistrationForm'
 import Message from '../components/Message'
 
 export default {
-	name: 'regi',
+	name: 'registration',
 	components: {
 		RegistrationForm,
 		Message
@@ -35,7 +37,8 @@ export default {
 			goRegistration: false,
 			showMessage: false,
 			message: '',
-			eventInfo: null
+			eventInfo: null,
+			isRegistered: false
 		}
 	},
 	created() {
@@ -61,18 +64,34 @@ export default {
 			case 'firstparamnotcorrect':
 				this.message = 'Первый параметр в ссылке не корректен!'
 				break;
-			case 'eventnotfaund':
+			case 'eventnotfound':
 				this.message = 'Ссылка не связана ни с одним из событий!'
 				break;
 			case 'personhasregistration':
 				this.message = 'Вы уже зарегистрированы на событие!'
 				break;
 			case 'ok':
-				this.showMessage = false
-				this.goRegistration = true
+				//this.showMessage = false
+				//this.goRegistration = true
+				// Сущесвования события и факт регистрации персоны: запросы к веб-расчетам
+				//// eslint-disable-next-line
+				// debugger
+				//this.getEventInfo(this.params.eventid)
+				// if (!this.eventInfoData && !this.error) {
+				// 	return 'eventnotfound'
+				// }
+				//this.hasRegistered(this.params.eventid, this.params.personid)
+				// if (isRegistered) {
+				// 	return 'personhasregistration'
+				// }
 				break;
 			default: break;
 		}
+	},
+
+	mounted() {
+		this.getEventInfo(this.params.eventid)
+		this.hasRegistered(this.params.eventid, this.params.personid)
 	},
 	methods: {
 		// Проверить параметры строки запроса
@@ -97,41 +116,152 @@ export default {
 				return 'firstparamnotcorrect'
 			}
 			// Сущесвования события и факт регистрации персоны: запросы к веб-расчетам
-			this.eventInfo = this.getEventInfo(this.params.eventid)
-			if (!this.eventInfo) {
-				return 'eventnotfaund'
-			}
-			var isRegistered = this.hasRegistered(this.params.personid)
-			if (isRegistered) {
-				return 'personhasregistration'
-			}
+			//// eslint-disable-next-line
+			// debugger
+			//this.getEventInfo(this.params.eventid)
+			// if (!this.eventInfoData && !this.error) {
+			// 	return 'eventnotfound'
+			// }
+			//this.hasRegistered(this.params.eventid, this.params.personid)
+			// if (isRegistered) {
+			// 	return 'personhasregistration'
+			// }
 			return 'ok'
 		},
+		// Вызвать веб-расчет _REGFORM.GETEVENTINFO
 		getEventInfo(eventid) {
-			// Вызвать веб-расчет _REGFORM.GETEVENTINFO
+			axios.post(window.myConfig.WsUrl, {
+				calcId: "_REGFORM.GETEVENTINFO",
+				args: JSON.stringify({ eventGuid: eventid}),
+				ticket: ''
+			})
+			.then(response => {
+				this.eventInfo = JSON.parse(response.data.d)
+				this.goRegistration = true
+				this.showMessage = false
+				})
+			.catch(error => {
+				this.error = error
+				this.goRegistration = false
+				this.showMessage = true
+				if (error.response) {
+						// ответ получен, но ошибка
+						this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+					} else if (error.request) {
+						// запрос выполнен, но ответ не получен
+						this.message = 'Ответ от сервера не получен!'
+					} else {
+						this.message = error.message
+					}
+			})
 
-			if (eventid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
-				return {
-					eventTitle: 'Вебинар',
-					eventDate: '2019-12-31',
-					eventDesriprion: 'Будет по-новогоднему весело!'
-				}
-			} else {
-				return null
-			}
-			
+			// this.runCalculation({
+			// 	serviceName: "_REGFORM.GETEVENTINFO",
+			// 	parameters: { eventGuid: eventid},
+			// 	onSuccess: function(data) {
+			// 		// eslint-disable-next-line
+			// 		debugger
+			// 		this.eventInfo = JSON.parse(data.d)
+			// 		this.goRegistration = true,
+			// 		this.showMessage = false
+			// 		this.errorMessage = 'Проверка!!!'
+			// 		// eslint-disable-next-line
+			// 		console.log(this.eventInfo.eventTitle + '\n' + this.goRegistration + '\n' + this.showMessage)
+			// 	},
+			// 	onError: function(error) {
+			// 		this.error = error
+			// 		this.showMessage = true
+			// 		this.goRegistration = false
+			// 		this.eventInfo = null
+			// 		if (error.response) {
+			// 			// ответ получен, но ошибка
+			// 			this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+			// 		} else if (error.request) {
+			// 			// запрос выполнен, но ответ не получен
+			// 			this.message = "Ответ от сервера не получен!"
+			// 		} else {
+			// 			this.message = error.message
+			// 		}
+			// 	}
+			// })
+			// 
+			// ## Stub --->
+			// if (eventid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
+			// 	return {
+			// 		eventTitle: 'Вебинар',
+			// 		eventDate: '2019-12-31',
+			// 		eventTime: '23:30',
+			// 		eventDesriprion: 'Будет по-новогоднему весело!'
+			// 	}
+			// } else {
+			// 	return null
+			// }
+			// ## Stub <---
 		},
-		hasRegistered ( personid ) {
-			if (personid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
-				return true
-			} else {
-				return false
-			}
-			
+
+		// Вызвать веб-расчет _REGFORM.HASREGISRATION
+		hasRegistered ( eventid, personid ) {
+			axios.post(window.myConfig.WsUrl, {
+				calcId: '_REGFORM.HASREGISRATION',
+				args: JSON.stringify({ eventGuid: eventid, personGuid: personid}),
+				ticket: ''
+			})
+			.then( response => {
+				// eslint-disable-next-line
+				// debugger
+				this.isRegistered = response.data.d === 'True' ? true : false
+				if(this.isRegistered) {
+					this.goRegistration = false
+					this.showMessage = true
+					this.message = 'Вы уже зарегистрированы!'
+				} else {
+					this.goRegistration = true
+					this.showMessage = false
+				}
+			})
+			.catch(error => {
+				this.error = error
+				this.goRegistration = false
+				this.showMessage = true
+				if (error.response) {
+						// ответ получен, но ошибка
+						this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+					} else if (error.request) {
+						// запрос выполнен, но ответ не получен
+						this.message = 'Ответ от сервера не получен!'
+					} else {
+						this.message = error.message
+					}
+			})
+
+			// this.runCalculation({
+			// 	serviceName: "",
+			// 	parameters: {eventGuid: eventid, personGuid: personid},
+			// 	onSuccess: function() {
+
+			// 	},
+			// 	onError: function() {
+			// 	}
+			// })
+			// if (personid === '8a583d06-4920-4cdc-bcdd-ef2d32463a81') {
+			// 	this.isRegistered = true
+			// 	this.message = 'Вы уже зарегистрированы на событие!'
+			// 	this.showMessage = true
+			// 	this.goRegistration = false
+			// } else {
+			// 	this.isRegistered = false
+			// 	this.showMessage = false
+			// 	this.goRegistration = true
+			// }
 		}
 	},
 	computed: {
-
+		eventInfoData() {
+			return this.eventInfo
+		},
+		goToRegistration() {
+			return this.goRegistration
+		}
 	}
 }
 </script>
