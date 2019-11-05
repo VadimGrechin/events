@@ -1,64 +1,65 @@
 <template>
-	<div class="registration-layout">
-		<!-- Информация о событии -->
-		<div>
-			Event Title: {{eventInfo.eventTitle}}
-			<br>
-			Event date: {{eventInfo.eventDate}}
-			<br>
-			Event time: {{eventInfo.eventTime}}
-		</div>
-		<!-- форма регистрации -->
-		<div v-if="!message">
-			<v-form
-						ref=form
-						v-model="valid"
-						:lazy-validation="lazy">
-				<!-- Поля -->
-				<v-text-field
-						v-model="registrationData.name"
-						:rules="[rules.required, rules.name, rules.length]"
-						label="Имя"
-						required></v-text-field>
+	<v-container>
+		<v-layout wrap justify-space-between>
+			<v-flex md5 xs12>
+				<v-card class="text-word-wrap">
+					<!-- Информация о событии -->
+					<v-card-title primary title>
+						<div class="headline">
+							Event Title: {{eventInfo.eventTitle}}
+						</div>
+					</v-card-title>
+					<v-card-text>
+						<p class="font-weight-bold">Event date: {{eventInfo.eventDate}}</p>
+						<p class="font-weight-bold">Event time: {{eventInfo.eventTime}}</p>
+						<p>{{eventInfo.eventDescription}}</p>
+					</v-card-text>
+				</v-card>
+			</v-flex>
+			<v-flex md6 xs12 >
+				<!-- форма регистрации -->
+				<v-form v-if="!message"
+							ref=form
+							v-model="valid"
+							:lazy-validation="lazy">
+					<!-- Поля -->
+					<v-text-field
+							v-model="registrationData.name"
+							:rules="[rules.required, rules.name, rules.length]"
+							label="Имя"
+							required></v-text-field>
+					<v-text-field
+							v-model="registrationData.surname"
+							:rules="[rules.length]"
+							label="Фамилия"></v-text-field>
+					<v-text-field
+							v-model="registrationData.email"
+							:rules="[rules.required, rules.email]"
+							label="e-mail"
+							required></v-text-field>
+					<v-text-field
+							v-model="registrationData.company"
+							:rules="[rules.company, rules.length]"
+							label="Компания"></v-text-field>
+					<v-text-field
+							v-model="registrationData.phone"
+							:rules="[rules.phone]"
+							label="Телефон"></v-text-field>
+					<v-select
+							v-model="registrationData.companyemployeesqty"
+							:items="items"
+							labels="Сотрудников в компании"></v-select>
+					<v-btn
+							:disabled="!valid"
+							color="success"
+							@click="validate">Зарегистрироваться</v-btn>
+				</v-form>
+				<!-- Сообщение -->
+				<message v-if="message" :message="message"></message>
+			</v-flex>
+		</v-layout>
+	</v-container>
 
-				<v-text-field
-						v-model="registrationData.surname"
-						:rules="[rules.length]"
-						label="Фамилия"></v-text-field>
-				
-				<v-text-field
-						v-model="registrationData.email"
-						:rules="[rules.required, rules.email]"
-						label="e-mail"
-						required></v-text-field>
-
-				<v-text-field
-						v-model="registrationData.company"
-						:rules="[rules.company, rules.length]"
-						label="Компания"></v-text-field>
-				
-				<v-text-field
-						v-model="registrationData.phone"
-						:rules="[rules.phone]"
-						label="Телефон"></v-text-field>
-
-				<v-select
-						v-model="registrationData.companyemployeesqty"
-						:items="items"
-						labels="Сотрудников в компании"></v-select>
-
-				<v-btn
-						:disabled="!valid"
-						color="success"
-						@click="validate">Зарегистрироваться</v-btn>
-
-			</v-form>
-		</div>
-
-		<!-- Сообщение -->
-		<message v-if="message" :message="message"></message>
-
-	</div>
 </template>
 
 <script>
@@ -148,9 +149,8 @@ export default {
 }
 </script>
 
-<style>
-.registration-layout {
-	display: flex;
-	flex-direction: row;
+<style >
+.text-word-wrap {
+	word-break: normal;
 }
 </style>

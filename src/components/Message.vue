@@ -1,10 +1,14 @@
 <template>
 	<v-container fluid>
-		<v-card >
-			<v-layout align-center justify-end column fill-height>
-				<h2 class="text-xs-center">{{message}}</h2>
-			</v-layout>
-		</v-card>
+		<v-layout align-center justify-end column fill-height>
+			<v-flex xs-12>
+				<v-card >
+					<v-card-text>
+						<h2 class="text-xs-center">{{message}}</h2>
+					</v-card-text>
+				</v-card>
+			</v-flex>
+		</v-layout>
 	</v-container>
 </template>
 

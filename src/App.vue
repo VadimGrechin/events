@@ -12,7 +12,7 @@
       </v-toolbar-title>
     </v-app-bar>
 
-    <v-content>
+    <v-content fluid>
       <v-container>
         <router-view></router-view>
       </v-container>

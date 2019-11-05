@@ -1,17 +1,25 @@
 <template>
-	<div class="registration-layout">
-		<!-- Название события -->
-		<div v-if="eventInfo">
-			<h2>Регистрация: {{eventInfo.eventTitle}}</h2>
-		</div>
-		<!-- Регистрация -->
-		<registration-form v-if="goRegistration && eventInfo" 
-											:event-info="eventInfo"
-											:idparams="params"></registration-form>
-		<!-- сообщение/ сообщение об ошибке -->
-		<message v-if="showMessage" :message="message"></message>
-		
-	</div>
+	<v-container>
+		<v-layout column>
+			<!-- Название события -->
+			<v-flex xs-12 v-if="eventInfo">
+				<v-card flat>
+					<v-card-text>
+						<h2 class="text-md-center text-sm-center text-xs-center">
+								Регистрация: {{eventInfo.eventTitle}}</h2>
+					</v-card-text>
+				</v-card>
+			</v-flex>
+			<v-layout my-1 row>
+				<!-- Регистрация -->
+				<registration-form v-if="goRegistration && eventInfo" 
+												:event-info="eventInfo"
+												:idparams="params"></registration-form>
+				<!-- сообщение/ сообщение об ошибке -->
+				<message v-if="showMessage" :message="message"></message>
+			</v-layout>
+		</v-layout>
+	</v-container>
 </template>
 
 <script>
@@ -65,14 +73,17 @@ export default {
 				this.message = 'Первый параметр в ссылке не корректен!'
 				break;
 			case 'ok':
+				this.showMessage = false
+				this.goRegistration = true
 				break;
 			default: break;
 		}
 	},
 
 	mounted() {
-		this.getEventInfo(this.params.eventid)
-		
+		if(!this.showMessage) {
+			this.getEventInfo(this.params.eventid)
+		}
 	},
 	methods: {
 		// Проверить параметры строки запроса
