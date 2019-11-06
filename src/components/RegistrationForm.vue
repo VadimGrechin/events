@@ -18,41 +18,41 @@
 					<!-- Поля -->
 					<v-text-field
 						v-model="registrationData.name"
-						:rules="[rules.required, rules.name, rules.length]"
-						label="Имя"
+						:rules="[rules.required(registrationData.name, warnings.oblygatorytofulfill), rules.name(registrationData.name, warnings.namehasconsistsletteronly), rules.length50(registrationData.name, warnings.linehasmore50symbols)]"
+						:label="$t('message.registrationForm.name')"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.surname"
-						:rules="[rules.length]"
-						label="Фамилия"></v-text-field>
+						:rules="[rules.length50(registrationData.surname, warnings.linehasmore50symbols)]"
+						:label="$t('message.registrationForm.surname')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.email"
-						:rules="[rules.required, rules.email]"
+						:rules="[rules.required(registrationData.email, warnings.oblygatorytofulfill), rules.email(registrationData.email, warnings.wronemail)]"
 						label="e-mail"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
-						:rules="[rules.company, rules.length]"
-						label="Компания"></v-text-field>
+						:rules="[rules.company(registrationData.company, warnings.rightcompanyname), rules.length100(registrationData.company, warnings.linehasmore100symbols)]"
+						:label="$t('message.registrationForm.company')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.company, rules.length]"
-						label="Должность"></v-text-field>
+						:rules="[rules.position(registrationData.position, warnings.righrightpositionname), rules.length100(registrationData.position, warnings.linehasmore100symbols)]"
+						:label="$t('message.registrationForm.position')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
-						:rules="[rules.phone]"
-						label="Телефон"></v-text-field>
+						:rules="[rules.phone(registrationData.phone, warnings.rightphonevalue)]"
+						:label="$t('message.registrationForm.phone')"></v-text-field>
 					
 					<!-- Согласие на использование данных -->
 					<v-checkbox
 						v-model="isConsent"
-						label="Согласны на обработку персональных данных">
+						:label="$t('message.registrationForm.consentprocessingpersdata')">
 					</v-checkbox>
 
 					<v-btn
 							:disabled="!this.valid || !this.isConsent"
 							color="success"
-							@click="validate">Зарегистрироваться</v-btn>
+							@click="validate">{{$t('message.registrationForm.registrate')}}</v-btn>
 				</v-form>
 				<!-- Сообщение -->
 				<message v-if="message" :message="message"></message>
@@ -72,6 +72,17 @@ export default {
 	components: {
 		Message
 	},
+	created() {
+		this.warnings.oblygatorytofulfill = this.$t('message.registrationForm.oblygatorytofulfill')
+		this.warnings.namehasconsistsletteronly = this.$t('message.registrationForm.namehasconsistsletteronly')
+		this.warnings.wronemail = this.$t('message.registrationForm.wronemail')
+		this.warnings.rightphonevalue = this.$t('message.registrationForm.rightphonevalue')
+		this.warnings.rightcompanyname = this.$t('message.registrationForm.rightcompanyname')
+		this.warnings.righrightpositionname = this.$t('message.registrationForm.righrightpositionname')
+		this.warnings.linehasmore50symbols = this.$t('message.registrationForm.linehasmore50symbols')
+		this.warnings.linehasmore100symbols = this.$t('message.registrationForm.linehasmore100symbols')
+	},
+
 	mounted() {
 		// Если есть персональные данные заполнить форму
 		if (this.personInfo) {
@@ -87,17 +98,28 @@ export default {
 			valid: true,
 			lazy: false,
 			rules: {
-				required: v => !!v || "Обязательно для заполнения!",
-				name: v => /[a-zA-zа-яА-Я]/.test(v) || "В имени должны быть тольо символы",
-				email: v => {
+				required: (v, msg) => !!v || msg,
+				name: (v, msg) => /[a-zA-zа-яА-Я]/.test(v) || msg,
+				email: (v, msg) => {
 					const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-					return emailPattern.test(v)
+					return emailPattern.test(v) || msg
 				},
-				phone: v => (/(\+\d{7,12})$/.test(v) || !v) || "Первый символ '+', далее - код страны, города/оператора мобильной связи, номер",
-				company: v => (/[a-zA-zА-Яа-яЁё.\s]/.test(v) || !v) || "",
-				length: v => (v && v.length <= 50 || !v) || "Количество символов превышает 50"
+				phone: (v, msg) => (/(\+\d{7,12})$/.test(v) || !v) || msg,
+				company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁё]*[0-9a-zA-zА-Яа-яЁё -&][A-Za-z0-9 -&.]*$/.test(v) || !v) || msg,
+				position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁё]*[0-9a-zA-zА-Яа-яЁё -][A-Za-z0-9 -.]*$/.test(v) || !v) || msg,
+				length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
+				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 			},
-			
+			warnings: {
+				oblygatorytofulfill: '',
+				namehasconsistsletteronly: '',
+				wronemail: '',
+				rightphonevalue: '',
+				rightcompanyname: '',
+				righrightpositionname: '',
+				linehasmore50symbols: '',
+				linehasmore100symbols: ''
+			},
 			registrationData: {
 				name: '',
 				surname: '',
@@ -133,18 +155,22 @@ export default {
 			.then(response => {
 				var isSaved = response.data.d === 'True' ? true : false
 				if (isSaved) {
-					this.message = 'Регистрация прошла успешно!'
+					//this.message = 'Регистрация прошла успешно!'
+					this.message = this.$t('message.registrationForm.registrationsuccess')
 				} else {
-					this.message = 'Данные регистрации не были сохранены.'
+					//this.message = 'Данные регистрации не были сохранены.'
+					this.message = this.$t('message.registrationForm.registratonfailed')
 				}
 			})
 			.catch(error => {
 				if (error.response) {
 						// ответ получен, но ошибка
-						this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						this.message = 'Ответ от сервера не получен!'
+						//this.message = 'Ответ от сервера не получен!'
+						this.message = this.$t('message.registrationPage.serverhasnoresponse')
 					} else {
 						this.message = error.message
 					}

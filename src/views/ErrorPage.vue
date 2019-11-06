@@ -3,8 +3,8 @@
 		<v-layout>
 			<v-card>
 				<v-card-text>
-					<h2>Ошибка!!!</h2>
-					<p>Некорректная ссылка!</p>
+					<h2>{{$t('message.errorPage.error')}}</h2>
+					<p>{{$t('message.errorPage.linkisnotcorrect')}}</p>
 				</v-card-text>
 			</v-card>
 		</v-layout>

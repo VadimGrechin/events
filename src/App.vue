@@ -11,6 +11,8 @@
 
 <script>
 
+import {i18n} from './plugins/i18n.js'
+
 export default {
   name: 'App',
   components: {
@@ -19,6 +21,7 @@ export default {
     //
   }),
   created() {
+    i18n.locale = this.$route.query ? this.$route.query.lang : 'ru'
 	},
 	methods: {
 	}

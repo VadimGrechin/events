@@ -3,7 +3,7 @@
 		<v-layout column>
 			<!-- Название события -->
 			<v-flex xs-12 v-if="eventInfo">
-				<h2 class="text-md-center text-sm-center text-xs-center grey--text text--darken-2">
+				<h2 class="text-md-center text-sm-center text-xs-center">
 					{{eventInfo.eventTitle}}</h2>
 			</v-flex>
 			<v-layout my-1 row>
@@ -57,19 +57,24 @@ export default {
 		this.showMessage = true
 		switch (paramsCheckResult) {
 			case 'noparams':
-				this.message = 'В ссылке нет параметров!'
+				this.message = this.$t('message.registrationPage.hasnoparams')
+				// this.message = 'В ссылке нет параметров!'
 				break;
 			case 'parameternotcorrect':
-				this.message = 'Параметр в ссылке некорректен!'
+				// this.message = 'Параметр в ссылке некорректен!'
+				this.message = this.$t('message.registrationPage.paramIsWrong')
 				break;
 			case 'bothparamsnotcorrect':
-				this.message = 'Параметры в ссылке некорректны!'
+				//this.message = 'Параметры в ссылке некорректны!'
+				this.message = this.$t('message.registrationPage.paramsAreWrong')
 				break;
 			case 'secondparamnotcorrect':
-				this.message = 'Второй параметр в ссылке не корректен!'
+				//this.message = 'Второй параметр в ссылке не корректен!'
+				this.message = this.$t('message.registrationPage.secondparamIsWrong')
 				break;
 			case 'firstparamnotcorrect':
-				this.message = 'Первый параметр в ссылке не корректен!'
+				//this.message = 'Первый параметр в ссылке не корректен!'
+				this.message = this.$t('message.registrationPage.firstparamIsWrong')
 				break;
 			case 'nosecondparams':
 				this.showMessage = false
@@ -140,7 +145,8 @@ export default {
 				} else {
 					this.goRegistration = false
 					this.showMessage = true
-					this.message = 'Ссылка не связана ни с одним из событий!'
+					//this.message = 'Ссылка не связана ни с одним из событий!'
+					this.message = this.$t('message.registrationPage.linkhasnotcorrespondin')
 				}
 				})
 			.catch(error => {
@@ -149,10 +155,12 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						// this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						this.message = 'Ответ от сервера не получен!'
+						//this.message = 'Ответ от сервера не получен!'
+						this.message = this.$t('message.registrationPage.serverhasnoresponse')
 					} else {
 						this.message = error.message
 					}
@@ -175,7 +183,8 @@ export default {
 				if(this.isRegistered) {
 					this.goRegistration = false
 					this.showMessage = true
-					this.message = 'Вы уже зарегистрированы!'
+					//this.message = 'Вы уже зарегистрированы!'
+					this.message = this.$t('message.registrationPage.youhaveregistration')
 					this.personInfo = null
 				} else {
 					this.goRegistration = true
@@ -188,10 +197,12 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						this.message = 'Ответ от сервера не получен!'
+						//this.message = 'Ответ от сервера не получен!'
+						this.message = this.$t('message.registrationPage.serverhasnoresponse')
 					} else {
 						this.message = error.message
 					}
@@ -206,11 +217,6 @@ export default {
 			return this.goRegistration
 		},
 		personInfoComp() {
-			// if(!this.personInfo) {
-			// 	return {
-
-			// 	}
-			// }
 			return this.personInfo
 		}
 	}

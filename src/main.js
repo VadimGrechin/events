@@ -7,6 +7,8 @@ import Registration from './views/Registration.vue'
 import ErrorPage from './views/ErrorPage.vue'
 import Ws from './api/webCalculation.js'
 
+import {i18n} from './plugins/i18n'
+
 Vue.mixin(Ws)
 
 Vue.use(VueRouter)
@@ -45,5 +47,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   vuetify,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

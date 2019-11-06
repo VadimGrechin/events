@@ -2,11 +2,7 @@
 	<v-container fluid>
 		<v-layout align-center justify-end column fill-height>
 			<v-flex xs-12>
-				<v-card >
-					<v-card-text>
-						<h2 class="text-xs-center">{{message}}</h2>
-					</v-card-text>
-				</v-card>
+				<h2 class="text-xs-center">{{message}}</h2>
 			</v-flex>
 		</v-layout>
 	</v-container>
