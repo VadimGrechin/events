@@ -1,12 +1,10 @@
 <template>
-	<v-container>
-		<v-layout>
-			<v-card>
-				<v-card-text>
-					<h2>{{$t('message.errorPage.error')}}</h2>
-					<p>{{$t('message.errorPage.linkisnotcorrect')}}</p>
-				</v-card-text>
-			</v-card>
+	<v-container fluid>
+		<v-layout align-center justify-end column fill-height>
+			<v-flex xs-12>
+					<h1 class="text-center">{{$t('message.errorPage.error')}}</h1>
+					<h2 class="text-center">{{$t('message.errorPage.linkisnotcorrect')}}</h2>				
+			</v-flex>
 		</v-layout>
 	</v-container>
 </template>
