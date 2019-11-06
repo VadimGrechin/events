@@ -11,6 +11,7 @@
 
 <script>
 
+import axios from 'axios'
 import {i18n} from './plugins/i18n.js'
 
 export default {
@@ -19,11 +20,46 @@ export default {
   },
   data: () => ({
     //
+    eventid: '',
+    eventInfo: null
   }),
   created() {
     i18n.locale = this.$route.query ? this.$route.query.lang : 'ru'
-	},
+    this.eventid = this.$route.params.eventGuid
+  },
+  mounted() {
+
+  },
 	methods: {
+    getEventInfo(eventid) {
+			axios.post(window.myConfig.WsUrl, {
+				calcId: "_REGFORM.GETEVENTINFO",
+				args: JSON.stringify({ eventGuid: eventid}),
+				ticket: ''
+			})
+			.then(response => {
+				this.eventInfo = JSON.parse(response.data.d)
+				if (!this.eventInfo) {
+					//this.message = 'Ссылка не связана ни с одним из событий!'
+          this.message = this.$t('message.registrationPage.linkhasnotcorrespondin')
+          this.$router.push({name: 'message', params: {message: this.message}})
+				}
+				})
+			.catch(error => {
+				this.error = error
+				if (error.response) {
+						// ответ получен, но ошибка
+            this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
+					} else if (error.request) {
+						// запрос выполнен, но ответ не получен
+            this.message = this.$t('message.registrationPage.serverhasnoresponse')
+            
+					} else {
+						this.message = error.message
+          }
+          this.$router.push({name: 'message', params: {message: this.message}})
+			})
+		},
 	}
 };
 </script>
