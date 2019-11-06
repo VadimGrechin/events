@@ -36,7 +36,7 @@
 						label="Компания"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.name, rules.length]"
+						:rules="[rules.company, rules.length]"
 						label="Должность"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
@@ -50,7 +50,7 @@
 					</v-checkbox>
 
 					<v-btn
-							:disabled="!valid && !isConsent"
+							:disabled="!this.valid || !this.isConsent"
 							color="success"
 							@click="validate">Зарегистрироваться</v-btn>
 				</v-form>
@@ -150,7 +150,7 @@ export default {
 					}
 			})
 		}
-	},
+	}
 }
 </script>
 
