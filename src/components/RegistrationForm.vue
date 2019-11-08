@@ -18,35 +18,35 @@
 					<!-- Поля -->
 					<v-text-field
 						v-model="registrationData.name"
-						:rules="[rules.required(registrationData.name, warnings.oblygatorytofulfill), rules.name(registrationData.name, warnings.namehasconsistsletteronly), rules.length50(registrationData.name, warnings.linehasmore50symbols)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryField), rules.name(registrationData.name, warnings.nameHasConsistsLetterOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
 						:label="$t('message.registrationForm.name')"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.surname"
-						:rules="[rules.length50(registrationData.surname, warnings.linehasmore50symbols)]"
+						:rules="[rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
 						:label="$t('message.registrationForm.surname')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.email"
-						:rules="[rules.required(registrationData.email, warnings.oblygatorytofulfill), rules.email(registrationData.email, warnings.wronemail)]"
+						:rules="[rules.required(registrationData.email, warnings.obligatoryField), rules.email(registrationData.email, warnings.wronEmail)]"
 						label="e-mail"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
-						:rules="[rules.company(registrationData.company, warnings.rightcompanyname), rules.length100(registrationData.company, warnings.linehasmore100symbols)]"
+						:rules="[rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.company')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.position(registrationData.position, warnings.righrightpositionname), rules.length100(registrationData.position, warnings.linehasmore100symbols)]"
+						:rules="[rules.position(registrationData.position, warnings.righrightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.position')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
-						:rules="[rules.phone(registrationData.phone, warnings.rightphonevalue)]"
+						:rules="[rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 						:label="$t('message.registrationForm.phone')"></v-text-field>
 					
 					<!-- Согласие на использование данных -->
 					<v-checkbox
 						v-model="isConsent"
-						:label="$t('message.registrationForm.consentprocessingpersdata')">
+						:label="$t('message.registrationForm.consentProcessingPersData')">
 					</v-checkbox>
 
 					<v-btn
@@ -73,14 +73,14 @@ export default {
 		Message
 	},
 	created() {
-		this.warnings.oblygatorytofulfill = this.$t('message.registrationForm.oblygatorytofulfill')
-		this.warnings.namehasconsistsletteronly = this.$t('message.registrationForm.namehasconsistsletteronly')
-		this.warnings.wronemail = this.$t('message.registrationForm.wronemail')
-		this.warnings.rightphonevalue = this.$t('message.registrationForm.rightphonevalue')
-		this.warnings.rightcompanyname = this.$t('message.registrationForm.rightcompanyname')
-		this.warnings.righrightpositionname = this.$t('message.registrationForm.righrightpositionname')
-		this.warnings.linehasmore50symbols = this.$t('message.registrationForm.linehasmore50symbols')
-		this.warnings.linehasmore100symbols = this.$t('message.registrationForm.linehasmore100symbols')
+		this.warnings.oblygatoryToFulfill = this.$t('message.registrationForm.oblygatoryToFulfill')
+		this.warnings.nameHasConsistsLetterOnly = this.$t('message.registrationForm.nameHasConsistsLetterOnly')
+		this.warnings.wronEmail = this.$t('message.registrationForm.wronEmail')
+		this.warnings.rightPhoneNumber = this.$t('message.registrationForm.rightPhoneNumber')
+		this.warnings.rightCompanyName = this.$t('message.registrationForm.rightCompanyName')
+		this.warnings.righrightPositionName = this.$t('message.registrationForm.rightPositionName')
+		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
+		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
 	},
 
 	mounted() {
@@ -111,14 +111,14 @@ export default {
 				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 			},
 			warnings: {
-				oblygatorytofulfill: '',
-				namehasconsistsletteronly: '',
-				wronemail: '',
-				rightphonevalue: '',
-				rightcompanyname: '',
-				righrightpositionname: '',
-				linehasmore50symbols: '',
-				linehasmore100symbols: ''
+				oblygatoryToFulfill: '',
+				nameHasConsistsLetterOnly: '',
+				wronEmail: '',
+				rightPhoneNumber: '',
+				rightCompanyName: '',
+				righrightPositionName: '',
+				lineHasMore50symbols: '',
+				lineHasMore100symbols: ''
 			},
 			registrationData: {
 				name: '',
@@ -140,7 +140,7 @@ export default {
 			this.saveRegistrationData()
 		},
 
-		// Вызвать веб-расчет _REGFORM.SAVEREGISTRATIONDATA
+		// Сохранить регистрационные данные _REGFORM.SAVEREGISTRATIONDATA
 		saveRegistrationData() {
 			var params = JSON.stringify({ 
 				eventGuid: this.idparams.eventid,
@@ -155,22 +155,20 @@ export default {
 			.then(response => {
 				var isSaved = response.data.d === 'True' ? true : false
 				if (isSaved) {
-					//this.message = 'Регистрация прошла успешно!'
-					this.message = this.$t('message.registrationForm.registrationsuccess')
+					// 'Регистрация прошла успешно!'
+					this.message = this.$t('message.registrationForm.registrationSuccess')
 				} else {
-					//this.message = 'Данные регистрации не были сохранены.'
-					this.message = this.$t('message.registrationForm.registratonfailed')
+					// 'Данные регистрации не были сохранены.'
+					this.message = this.$t('message.registrationForm.registratonFailed')
 				}
 			})
 			.catch(error => {
 				if (error.response) {
 						// ответ получен, но ошибка
-						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
-						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
+						this.message = this.$t('message.registrationPage.responseButError', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						//this.message = 'Ответ от сервера не получен!'
-						this.message = this.$t('message.registrationPage.serverhasnoresponse')
+						this.message = this.$t('message.registrationPage.serverNotResponse')
 					} else {
 						this.message = error.message
 					}

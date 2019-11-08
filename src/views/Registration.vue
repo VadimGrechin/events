@@ -57,7 +57,7 @@ export default {
 		this.showMessage = true
 		switch (paramsCheckResult) {
 			case 'noparams':
-				this.message = this.$t('message.registrationPage.hasnoparams')
+				this.message = this.$t('message.registrationPage.hasNoParams')
 				// this.message = 'В ссылке нет параметров!'
 				break;
 			case 'parameternotcorrect':
@@ -70,11 +70,11 @@ export default {
 				break;
 			case 'secondparamnotcorrect':
 				//this.message = 'Второй параметр в ссылке не корректен!'
-				this.message = this.$t('message.registrationPage.secondparamIsWrong')
+				this.message = this.$t('message.registrationPage.secondParamIsWrong')
 				break;
 			case 'firstparamnotcorrect':
 				//this.message = 'Первый параметр в ссылке не корректен!'
-				this.message = this.$t('message.registrationPage.firstparamIsWrong')
+				this.message = this.$t('message.registrationPage.firstParamIsWrong')
 				break;
 			case 'nosecondparams':
 				this.showMessage = false
@@ -145,8 +145,8 @@ export default {
 				} else {
 					this.goRegistration = false
 					this.showMessage = true
-					//this.message = 'Ссылка не связана ни с одним из событий!'
-					this.message = this.$t('message.registrationPage.linkhasnotcorrespondin')
+					//'Ссылка не связана ни с одним из событий!'
+					this.message = this.$t('message.registrationPage.linkHasNotCorrespondin')
 				}
 				})
 			.catch(error => {
@@ -155,12 +155,10 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						// this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
-						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
+						this.message = this.$t('message.registrationPage.responseButError', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						//this.message = 'Ответ от сервера не получен!'
-						this.message = this.$t('message.registrationPage.serverhasnoresponse')
+						this.message = this.$t('message.registrationPage.serverNotResponse')
 					} else {
 						this.message = error.message
 					}
@@ -183,8 +181,8 @@ export default {
 				if(this.isRegistered) {
 					this.goRegistration = false
 					this.showMessage = true
-					//this.message = 'Вы уже зарегистрированы!'
-					this.message = this.$t('message.registrationPage.youhaveregistration')
+					// 'Вы уже зарегистрированы!'
+					this.message = this.$t('message.registrationPage.youHaveRegistration')
 					this.personInfo = null
 				} else {
 					this.goRegistration = true
@@ -197,12 +195,10 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
-						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
+						this.message = this.$t('message.registrationPage.responseButError', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						//this.message = 'Ответ от сервера не получен!'
-						this.message = this.$t('message.registrationPage.serverhasnoresponse')
+						this.message = this.$t('message.registrationPage.serverNotResponse')
 					} else {
 						this.message = error.message
 					}
