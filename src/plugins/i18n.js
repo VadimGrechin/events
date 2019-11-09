@@ -84,5 +84,6 @@ const	messages = {
 
 export const i18n = new VueI18n({
 	fallbackLocale: 'ru',
+	silentFallbackWarn: true,
 	messages
 })

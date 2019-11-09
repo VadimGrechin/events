@@ -36,7 +36,7 @@
 						:label="$t('message.registrationForm.company')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.position(registrationData.position, warnings.righrightpositionname), rules.length100(registrationData.position, warnings.linehasmore100symbols)]"
+						:rules="[rules.position(registrationData.position, warnings.rightpositionname), rules.length100(registrationData.position, warnings.linehasmore100symbols)]"
 						:label="$t('message.registrationForm.position')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
@@ -78,7 +78,7 @@ export default {
 		this.warnings.wronemail = this.$t('message.registrationForm.wronemail')
 		this.warnings.rightphonevalue = this.$t('message.registrationForm.rightphonevalue')
 		this.warnings.rightcompanyname = this.$t('message.registrationForm.rightcompanyname')
-		this.warnings.righrightpositionname = this.$t('message.registrationForm.righrightpositionname')
+		this.warnings.rightpositionname = this.$t('message.registrationForm.rightpositionname')
 		this.warnings.linehasmore50symbols = this.$t('message.registrationForm.linehasmore50symbols')
 		this.warnings.linehasmore100symbols = this.$t('message.registrationForm.linehasmore100symbols')
 	},
@@ -111,14 +111,6 @@ export default {
 				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 			},
 			warnings: {
-				oblygatorytofulfill: '',
-				namehasconsistsletteronly: '',
-				wronemail: '',
-				rightphonevalue: '',
-				rightcompanyname: '',
-				righrightpositionname: '',
-				linehasmore50symbols: '',
-				linehasmore100symbols: ''
 			},
 			registrationData: {
 				name: '',
