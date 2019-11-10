@@ -49,10 +49,17 @@
 						:label="$t('message.registrationForm.consentProcessingPersData')">
 					</v-checkbox>
 
+					<!-- reCAPTCHA -->
+					<vue-recaptcha v-if="valid && isConsent"
+						ref="recaptcha"
+						:sitekey="sitekey"
+						@verify="captchaResponse"
+						@expired="onCaptchaExpired"></vue-recaptcha>
+
 					<v-btn
-							:disabled="!this.valid || !this.isConsent"
+							:disabled="!(valid && isConsent && captchaVerify)"
 							color="success"
-							@click="validate">{{$t('message.registrationForm.registrate')}}</v-btn>
+							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
 				</v-form>
 				<!-- Сообщение -->
 				<message v-if="message" :message="message"></message>
@@ -65,12 +72,14 @@
 <script>
 import axios from 'axios'
 import Message from '../components/Message'
+import VueRecaptcha from 'vue-recaptcha'
 
 export default {
 	name: 'registration-form',
 	props: [ 'eventInfo', 'personInfo', 'idparams' ],
 	components: {
-		Message
+		Message,
+		VueRecaptcha
 	},
 	created() {
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
@@ -82,7 +91,6 @@ export default {
 		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
 		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
 	},
-
 	mounted() {
 		// Если есть персональные данные заполнить форму
 		if (this.personInfo) {
@@ -92,6 +100,11 @@ export default {
 			this.registrationData.company = this.personInfo.company
 			this.registrationData.position = this.personInfo.position
 			this.registrationData.phone = this.personInfo.phone
+		}
+	},
+	updated() {
+		if (!this.valid) {
+			this.isConsent = false
 		}
 	},
 	data: () => ({
@@ -110,6 +123,7 @@ export default {
 				length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
 				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 			},
+			isConsent: false,
 			warnings: {},
 			registrationData: {
 				name: '',
@@ -119,12 +133,45 @@ export default {
 				phone: '',
 				position: ''
 			},
-			isConsent: false,
-			message: ''
+			message: '',
+			token: '',
+			isVerified: false
 	}) ,
 	methods: {
+		// reCAPTCHA response
+		captchaResponse(recaptchaToken) {
+			this.token = recaptchaToken
+			// выполнить проверку на сервере
+			var params = JSON.stringify({recaptchaToken})
+
+			axios.post(window.myConfig.WsUrl, {
+				calcId: '_REGFORM.VERIFYUSER',
+				args: params,
+				ticket: ''
+			})
+			.then( response => {
+				this.isVerified = response.data.d === 'True' ? true : false
+			})
+			.catch( error => {
+				if (error.response) {
+						// ответ получен, но ошибка
+						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
+						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
+					} else if (error.request) {
+						// запрос выполнен, но ответ не получен
+						//this.message = 'Ответ от сервера не получен!'
+						this.message = this.$t('message.registrationPage.serverhasnoresponse')
+					} else {
+						this.message = error.message
+					}
+			})
+		},
+		onCaptchaExpired() {
+			this.$refs.recaptcha.reset()
+		},
+
 		// Сохранить регистрационные данные
-		validate(){
+		registrate(){
 			if (this.$refs.form.validate()) {
 				this.snackbar = true
 			}
@@ -164,6 +211,14 @@ export default {
 						this.message = error.message
 					}
 			})
+		}
+	},
+	computed: {
+		sitekey() {
+			return window.myConfig.sitekey
+		},
+		captchaVerify() {
+			return this.isVerified
 		}
 	}
 }
