@@ -8,10 +8,10 @@ const	messages = {
 			message: {
 				errorPage: {
 					error: 'Ошибка!!!',
-					linkIsWron: 'Некорректная ссылка!',
+					linkIsWrong: 'Некорректная ссылка!',
 				},
 				registrationPage: {
-					hasNoParams: 'В ссылке нет параметров!',
+					linkHasNoParams: 'В ссылке нет параметров!',
 					paramIsWrong: 'Параметр в ссылке некорректен!',
 					paramsAreWrong: 'Параметры в ссылке некорректны!',
 					secondParamIsWrong: 'Второй параметр в ссылке не корректен!',
@@ -27,10 +27,10 @@ const	messages = {
 					company: 'Компания',
 					position: 'Должность',
 					phone: 'Телефон',
-					obligatoryField: 'Обязательно для заполнения!',
 					consentProcessingPersData: 'Я согласен на обработку персональных данных',
 					registrate: 'Зарегистрироваться',
-					nameHasConsistsLetterOnly: 'В имени должны быть только буквы',
+					obligatoryWriteIn: 'Обязательно для заполнения!',
+					nameMastConsistsLettersOnly: 'В имени должны быть только буквы',
 					wronEmail: "Некоректный e-mail!",
 					rightCompanyName: "Допустимы буквы, цифры, символы: '.', '-', '&'",
 					rightPositionName: "Допустимы буквы, цифры, символы: '.', '-'",
@@ -46,10 +46,10 @@ const	messages = {
 			message: {
 				errorPage: {
 					error: 'Помилка!!!',
-					linkIsWron: 'Некоректне посилання!',
+					linkIsWrong: 'Некоректне посилання!',
 				},
 				registrationPage: {
-					hasNoParams: 'В посиланні відсутні параметри!',
+					linkHasNoParams: 'В посиланні відсутні параметри!',
 					paramIsWrong: 'Параметр в посиланні некоректний!',
 					paramsAreWrong: 'Параметри в посиланні некоректні!',
 					secondParamIsWrong: 'Другий параметр в посиланні некоректний!',
@@ -65,10 +65,10 @@ const	messages = {
 					company: 'Компанія',
 					position: 'Посада',
 					phone: 'Телефон',
-					obligatoryField: "Обов'язкове для заповнення!",
 					consentProcessingPersData: 'Я згоден на обробку персональних даних',
 					registrate: 'Зареєструватися',
-					nameHasConsistsLetterOnly: 'В імені мають бути лише літери',
+					obligatoryWriteIn: "Обов'язково для заповнення!",
+					nameMastConsistsLettersOnly: 'В імені мають бути лише літери',
 					wronEmail: "Некоректний e-mail!",
 					rightCompanyName: "Дозволені літери, цифры, символы: '.', '-', '&'",
 					rightPositionName: "Дозволені літери, цифры, символы: '.', '-'",
@@ -84,5 +84,6 @@ const	messages = {
 
 export const i18n = new VueI18n({
 	fallbackLocale: 'ru',
+	silentFallbackWarn: true,
 	messages
 })

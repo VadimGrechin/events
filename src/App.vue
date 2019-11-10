@@ -22,7 +22,7 @@ export default {
   }),
   created() {
     i18n.locale = this.$route.query ? this.$route.query.lang : 'ru'
-	},
+  },
 	methods: {
 	}
 };
