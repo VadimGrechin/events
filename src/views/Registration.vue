@@ -169,6 +169,7 @@ export default {
 
 		// Вызвать веб-расчет _REGFORM.HASREGISRATION
 		hasRegistered ( eventid, personid ) {
+			axios.default.withCredentials = true;
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.HASREGISRATION',
 				args: JSON.stringify({ eventGuid: eventid, personGuid: personid}),

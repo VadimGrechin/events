@@ -112,14 +112,14 @@ export default {
 			lazy: false,
 			rules: {
 				required: (v, msg) => !!v || msg,
-				name: (v, msg) => /[a-zA-zа-яА-Я]/.test(v) || msg,
+				name: (v, msg) => /[a-zA-zа-яА-ЯІіЇїЄєҐґ']/.test(v) || msg,
 				email: (v, msg) => {
 					const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 					return emailPattern.test(v) || msg
 				},
 				phone: (v, msg) => (/(\+\d{7,12})$/.test(v) || !v) || msg,
-				company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁё]*[0-9a-zA-zА-Яа-яЁё -&][A-Za-z0-9 -&.]*$/.test(v) || !v) || msg,
-				position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁё]*[0-9a-zA-zА-Яа-яЁё -][A-Za-z0-9 -.]*$/.test(v) || !v) || msg,
+				company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
+				position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
 				length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
 				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 			},
