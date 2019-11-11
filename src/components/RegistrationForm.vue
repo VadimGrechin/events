@@ -50,13 +50,13 @@
 					</v-checkbox>
 
 					<!-- reCAPTCHA -->
-					<vue-recaptcha v-if="valid && isConsent"
+					<vue-recaptcha 
 						ref="recaptcha"
 						:sitekey="sitekey"
 						@verify="captchaResponse"
 						@expired="onCaptchaExpired"></vue-recaptcha>
 
-					<v-btn
+					<v-btn class="mt-2"
 							:disabled="!(valid && isConsent && captchaVerify)"
 							color="success"
 							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
@@ -197,7 +197,7 @@ export default {
 					this.message = this.$t('message.registrationForm.registrationSuccess')
 				} else {
 					//this.message = 'Данные регистрации не были сохранены.'
-					this.message = this.$t('message.registrationForm.registratonFailed')
+					this.message = this.$t('message.registrationPage.youHaveRegistration')
 				}
 			})
 			.catch(error => {
