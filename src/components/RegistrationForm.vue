@@ -62,7 +62,7 @@
 							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
 				</v-form>
 				<!-- Сообщение -->
-				<message v-if="message" :message="message"></message>
+				<message v-if="message" :titlemessage="message" :message="messageadd"></message>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -82,6 +82,8 @@ export default {
 		VueRecaptcha
 	},
 	created() {
+		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
+
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
 		this.warnings.nameMastConsistsLettersOnly = this.$t('message.registrationForm.nameMastConsistsLettersOnly')
 		this.warnings.wronEmail = this.$t('message.registrationForm.wronEmail')
@@ -108,34 +110,36 @@ export default {
 		}
 	},
 	data: () => ({
-			valid: true,
-			lazy: false,
-			rules: {
-				required: (v, msg) => !!v || msg,
-				name: (v, msg) => /[a-zA-zа-яА-ЯІіЇїЄєҐґ']/.test(v) || msg,
-				email: (v, msg) => {
-					const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-					return emailPattern.test(v) || msg
-				},
-				phone: (v, msg) => (/(\+\d{7,12})$/.test(v) || !v) || msg,
-				company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
-				position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
-				length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
-				length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
+		lang: '',
+		valid: true,
+		lazy: false,
+		rules: {
+			required: (v, msg) => !!v || msg,
+			name: (v, msg) => /[a-zA-zа-яА-ЯІіЇїЄєҐґ']/.test(v) || msg,
+			email: (v, msg) => {
+				const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+				return emailPattern.test(v) || msg
 			},
-			isConsent: false,
-			warnings: {},
-			registrationData: {
-				name: '',
-				surname: '',
-				email: '',
-				company: '',
-				phone: '',
-				position: ''
-			},
-			message: '',
-			token: '',
-			isVerified: false
+			phone: (v, msg) => (/(\+\d{7,12})$/.test(v) || !v) || msg,
+			company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
+			position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
+			length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
+			length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
+		},
+		isConsent: false,
+		warnings: {},
+		registrationData: {
+			name: '',
+			surname: '',
+			email: '',
+			company: '',
+			phone: '',
+			position: ''
+		},
+		message: '',
+		messageadd: '',
+		token: '',
+		isVerified: false
 	}) ,
 	methods: {
 		// reCAPTCHA response
@@ -183,7 +187,8 @@ export default {
 			var params = JSON.stringify({ 
 				eventGuid: this.idparams.eventid,
 				personGuid: this.idparams.personid,
-				personData: this.registrationData})
+				personData: this.registrationData,
+				lang: this.lang})
 
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.SAVEREGISTRATIONDATA',
@@ -195,6 +200,7 @@ export default {
 				if (isSaved) {
 					//this.message = 'Регистрация прошла успешно!'
 					this.message = this.$t('message.registrationForm.registrationSuccess')
+					this.messageadd = this.$t('message.registrationForm.registrationSuccessAdd')
 				} else {
 					//this.message = 'Данные регистрации не были сохранены.'
 					this.message = this.$t('message.registrationPage.youHaveRegistration')

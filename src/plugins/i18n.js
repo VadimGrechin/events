@@ -38,6 +38,7 @@ const	messages = {
 					lineHasMore50symbols: 'Количество символов превышает 50',
 					lineHasMore100symbols: 'Количество символов превышает 100',
 					registrationSuccess: 'Регистрация прошла успешно!',
+					registrationSuccessAdd: 'На Ваш электронный адрес отправлено письмо со ссылкой для подключения к мероприятию.',
 					registratonFailed: 'Данные регистрации не были сохранены.',
 				}	
 			}
@@ -76,6 +77,7 @@ const	messages = {
 					lineHasMore50symbols: 'Кількість символів перевищує 50',
 					lineHasMore100symbols: 'Кількість символів перевищує 100',
 					registrationSuccess: 'Реєстрація пройшла успішно!',
+					registrationSuccessAdd: 'На Вашу электронну адресу відправлено листа із посиланням для підключення до події.',
 					registratonFailed: 'Дані реєстрації не були збережені.',
 				},
 			}

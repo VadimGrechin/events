@@ -13,7 +13,7 @@
 												:person-info="personInfoComp"
 												:idparams="params"></registration-form>
 				<!-- сообщение/ сообщение об ошибке -->
-				<message v-if="showMessage" :message="message"></message>
+				<message v-if="showMessage" :titlemessage="message"></message>
 			</v-layout>
 		</v-layout>
 	</v-container>
@@ -37,6 +37,7 @@ export default {
 				eventid: null,
 				personid: null
 			},
+			lang: 'ru',
 			error: null,
 			errorMessage: null,
 			goRegistration: false,
@@ -51,6 +52,7 @@ export default {
 	created() {
 		this.params.eventid = this.$route.params.eventGuid
 		this.params.personid = this.$route.params.personGuid
+		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
 
 		var paramsCheckResult = this.checkParams(this.params)
 		
@@ -89,7 +91,7 @@ export default {
 			default: break;
 		}
 		if(!this.showMessage) {
-			this.getEventInfo(this.params.eventid)
+			this.getEventInfo(this.params.eventid, this.lang)
 		}
 	},
 
@@ -128,10 +130,10 @@ export default {
 			return 'ok'
 		},
 		// Получить информция о событии _REGFORM.GETEVENTINFO
-		getEventInfo(eventid) {
+		getEventInfo(eventid, lang) {
 			axios.post(window.myConfig.WsUrl, {
 				calcId: "_REGFORM.GETEVENTINFO",
-				args: JSON.stringify({ eventGuid: eventid}),
+				args: JSON.stringify({ eventGuid: eventid, lang}),
 				ticket: ''
 			})
 			.then(response => {
@@ -140,7 +142,7 @@ export default {
 					this.goRegistration = true
 					this.showMessage = false
 					if (!this.skipRegistrationCheck) {
-						this.hasRegistered(this.params.eventid, this.params.personid)
+						this.hasRegistered(this.params.eventid, this.params.personid, this.lang)
 					}
 				} else {
 					this.goRegistration = false
@@ -155,10 +157,8 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						// this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
 						this.message = this.$t('message.registrationPage.responseButError', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
-						// запрос выполнен, но ответ не получен
 						//this.message = 'Ответ от сервера не получен!'
 						this.message = this.$t('message.registrationPage.serverNotResponse')
 					} else {
@@ -168,23 +168,19 @@ export default {
 		},
 
 		// Вызвать веб-расчет _REGFORM.HASREGISRATION
-		hasRegistered ( eventid, personid ) {
+		hasRegistered ( eventid, personid, lang ) {
 			axios.default.withCredentials = true;
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.HASREGISRATION',
-				args: JSON.stringify({ eventGuid: eventid, personGuid: personid}),
+				args: JSON.stringify({ eventGuid: eventid, personGuid: personid, lang}),
 				ticket: ''
 			})
 			.then( response => {
-				// aeslint-disable-next-line
-				//debugger
 				this.personInfo = JSON.parse(response.data.d)
 				this.isRegistered = this.personInfo.isRegistered
-				//this.isRegistered = response.data.d === 'True' ? true : false
 				if(this.isRegistered) {
 					this.goRegistration = false
 					this.showMessage = true
-					//this.message = 'Вы уже зарегистрированы!'
 					this.message = this.$t('message.registrationPage.youHaveRegistration')
 					this.personInfo = null
 				} else {
@@ -198,11 +194,9 @@ export default {
 				this.showMessage = true
 				if (error.response) {
 						// ответ получен, но ошибка
-						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
 						this.message = this.$t('message.registrationPage.responseButError', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						//this.message = 'Ответ от сервера не получен!'
 						this.message = this.$t('message.registrationPage.serverNotResponse')
 					} else {
 						this.message = error.message
