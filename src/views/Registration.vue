@@ -3,8 +3,8 @@
 		<v-layout column>
 			<!-- Название события -->
 			<v-flex xs-12 v-if="eventInfo">
-				<h2 class="text-md-center text-sm-center text-xs-center">
-					{{eventInfo.eventTitle}}</h2>
+				<h1 class="text-md-center text-sm-center text-xs-center">
+					{{eventInfo.eventTitle}}</h1>
 			</v-flex>
 			<v-layout my-1 row>
 				<!-- Регистрация -->
