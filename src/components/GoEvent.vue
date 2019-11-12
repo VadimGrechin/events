@@ -13,7 +13,6 @@ export default {
 		return {
 			eventGuid: '',
 			personGuid: '',
-			eventLink: null,
 			messageTitle: null,
 			messageContent: null
 		}
