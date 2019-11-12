@@ -50,11 +50,16 @@ export default {
 				ticket: ''
 			})
 			.then( response => {
-				var link = response.data.d
-				if (link) {
-					window.location = link
+				var resp = JSON.parse(response.data.d)
+				if (resp.success) {
+					var link = resp.link
+					if (link) {
+						window.location = link
+					} else {
+						this.messageTitle = 'Ссылка сейчас не доаступна!'
+					}
 				} else {
-					this.messageTitle = 'Мероприятие завершено!'
+					this.messageTitle = resp.message
 				}
 			})
 			.catch(error => {
@@ -63,8 +68,6 @@ export default {
 			})
 		},
 		checkParams: function(eventGuid, personGuid) {
-			// eslint-disable-next-line
-			debugger
 			var eventidIsCorrect = false
 			var personidIsCorrect  = false
 			var personidIsMissing = true

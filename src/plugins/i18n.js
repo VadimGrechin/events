@@ -22,6 +22,7 @@ const	messages = {
 					youHaveRegistration: 'Регистрация c указанным электронным адресом уже существует!',
 				},
 				registrationForm: {
+					obligatoryFieldMessage: '* - обязательные поля!',
 					name: 'Имя',
 					surname: 'Фамилия',
 					company: 'Компания',
@@ -61,6 +62,7 @@ const	messages = {
 					youHaveRegistration: 'Реєстрація з вказанною електронною адресою вже існує!',
 				},
 				registrationForm: {
+					obligatoryFieldMessage: "* - обов'язкові поля!",
 					name: "Ім'я",
 					surname: 'Прізвище',
 					company: 'Компанія',

@@ -9,7 +9,9 @@
 					</v-card-title>
 				</v-card>
 			</v-flex>
+
 			<v-flex md6 xs12 >
+				<h3>{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
 				<!-- форма регистрации -->
 				<v-form v-if="!message"
 							ref=form
@@ -19,29 +21,29 @@
 					<v-text-field
 						v-model="registrationData.name"
 						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.name')"
+						:label="$t('message.registrationForm.name') + ' *'"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.surname"
 						:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.surname')"></v-text-field>
+						:label="$t('message.registrationForm.surname') + ' *'"></v-text-field>
 					<v-text-field
 						v-model="registrationData.email"
 						:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
-						label="e-mail"
+						label="e-mail *"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
 						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.company')"></v-text-field>
+						:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
 						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.position')"></v-text-field>
+						:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
 						:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
-						:label="$t('message.registrationForm.phone')"></v-text-field>
+						:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
 					
 					<!-- Согласие на использование данных -->
 					<v-checkbox
@@ -105,9 +107,9 @@ export default {
 		}
 	},
 	updated() {
-		if (!this.valid) {
-			this.isConsent = false
-		}
+		// if (!this.valid) {
+		// 	this.isConsent = false
+		// }
 	},
 	data: () => ({
 		lang: '',
