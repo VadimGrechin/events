@@ -11,7 +11,7 @@
 			</v-flex>
 
 			<v-flex md6 xs12 >
-				<h3 v-if="!valid">{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
+				<h3 v-if="!isSended">{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
 				<!-- форма регистрации -->
 				<v-form v-if="!message"
 							ref=form
@@ -141,7 +141,8 @@ export default {
 		message: '',
 		messageContent: '',
 		token: '',
-		isVerified: false
+		isVerified: false,
+		isSended: false
 	}) ,
 	methods: {
 		// reCAPTCHA response
@@ -181,6 +182,7 @@ export default {
 			if (this.$refs.form.validate()) {
 				this.snackbar = true
 			}
+			this.isSended = true
 			this.saveRegistrationData()
 		},
 
