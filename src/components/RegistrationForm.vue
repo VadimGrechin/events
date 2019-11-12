@@ -11,7 +11,7 @@
 			</v-flex>
 
 			<v-flex md6 xs12 >
-				<h3>{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
+				<h3 v-if="!valid">{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
 				<!-- форма регистрации -->
 				<v-form v-if="!message"
 							ref=form
