@@ -38,13 +38,8 @@ const routes = [
     props: true
   },
   {
-    path: '/goevent/:eventGuid/:personGuid',
+    path: '/goevent/:eventGuid/:personGuid?',
     name: 'goevent',
-    component: GoEvent,
-  },
-  {
-    path: '/goevent/:eventGuid',
-    name: 'goeventperson',
     component: GoEvent,
   },
   {
@@ -60,7 +55,7 @@ const router = new VueRouter({
   routes
 })
 
-Vue.config.productionTip = true
+Vue.config.productionTip = false
 
 new Vue({
   router,

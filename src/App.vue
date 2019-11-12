@@ -21,8 +21,21 @@ export default {
     //
   }),
   created() {
-    i18n.locale = this.$route.query ? this.$route.query.lang.toLowerCase() : 'ru'
+    var lang = ''
+    try {
+      lang = this.$route.query ? this.$route.query.lang.toLowerCase() : 'ru'
+    } catch (error) {
+      lang = 'ru'
+    }
+    i18n.locale = lang
+    window.myConfig.lang = lang
   },
+  mounted() {
+    if ( window.myConfig.lang === 'uk' ) {
+      window.title = 'Реєстрація'
+    }
+  },
+
 	methods: {
 	}
 };
