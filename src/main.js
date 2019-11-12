@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify';
 import Registration from './views/Registration.vue'
 import ErrorPage from './views/ErrorPage.vue'
 import Message from './components/Message.vue'
+import GoEvent from './components/GoEvent.vue'
 import Ws from './api/webCalculation.js'
 
 import {i18n} from './plugins/i18n'
@@ -37,6 +38,16 @@ const routes = [
     props: true
   },
   {
+    path: '/goevent/:eventGuid/:personGuid',
+    name: 'goevent',
+    component: GoEvent,
+  },
+  {
+    path: '/goevent/:eventGuid',
+    name: 'goeventperson',
+    component: GoEvent,
+  },
+  {
     path: '*',
     name: 'notvalidlink',
     component: ErrorPage,
@@ -49,7 +60,7 @@ const router = new VueRouter({
   routes
 })
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 new Vue({
   router,

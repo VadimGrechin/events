@@ -21,7 +21,7 @@ export default {
     //
   }),
   created() {
-    i18n.locale =  this.$route.query ? this.$route.query.lang.toLowerCase() : 'ru'
+    i18n.locale = this.$route.query ? this.$route.query.lang.toLowerCase() : 'ru'
   },
 	methods: {
 	}

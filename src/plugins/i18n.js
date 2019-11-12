@@ -19,7 +19,7 @@ const	messages = {
 					linkHasNotCorrespondin: 'Ссылка не связана ни с одним из событий!',
 					serverNotResponse: 'Ответ от сервера не получен!',
 					responseButError: 'Код ответа: {errorresponsestatus}\nОшибка: {errorresponsedata}',
-					youHaveRegistration: 'Вы уже зарегистрированы!',
+					youHaveRegistration: 'Регистрация c указанным электронным адресом уже существует!',
 				},
 				registrationForm: {
 					name: 'Имя',
@@ -37,8 +37,8 @@ const	messages = {
 					rightPhoneNumber: "Первый символ '+', далее - код страны, города/оператора мобильной связи, номер",
 					lineHasMore50symbols: 'Количество символов превышает 50',
 					lineHasMore100symbols: 'Количество символов превышает 100',
-					registrationSuccess: 'Регистрация прошла успешно!',
-					registrationSuccessAdd: 'На Ваш электронный адрес отправлено письмо со ссылкой для подключения к мероприятию.',
+					registrationSuccess: 'Спасибо за регистрацию!',
+					registrationSuccessAdd: 'Вскоре Вы получите электронное письмо с подтверждением, в котором будут указаны детали, которые Вам необходимо знать о мероприятии.<br>Мы с нетерпением ждем встречи с Вами.',
 					registratonFailed: 'Данные регистрации не были сохранены.',
 				}	
 			}
@@ -58,7 +58,7 @@ const	messages = {
 					linkHasNotCorrespondin: "Посилання не пов'язане з жодною подією!",
 					serverNotResponse: 'Відповідь від сервера не отримана!',
 					responseButError: 'Код відповіді: {errorresponsestatus}\nПомилка: {errorresponsedata}',
-					youHaveRegistration: 'Ви вже зареєстровані!',
+					youHaveRegistration: 'Реєстрація з вказанною електронною адресою вже існує!',
 				},
 				registrationForm: {
 					name: "Ім'я",
@@ -76,8 +76,8 @@ const	messages = {
 					rightPhoneNumber: "Перший символ '+', далі - код країни, міста/оператора мобільного зв'язку, номер",
 					lineHasMore50symbols: 'Кількість символів перевищує 50',
 					lineHasMore100symbols: 'Кількість символів перевищує 100',
-					registrationSuccess: 'Реєстрація пройшла успішно!',
-					registrationSuccessAdd: 'На Вашу электронну адресу відправлено листа із посиланням для підключення до події.',
+					registrationSuccess: 'Дякуэмо за реэстрацію!',
+					registrationSuccessAdd: 'Незабаром Ви отримаєте електронного листа з підтверженням, в якому будуть вказані деталі, які Вам потрібно занти про подію.<br>ми з нетерпінням чекаємо на зустріч з Вами.',
 					registratonFailed: 'Дані реєстрації не були збережені.',
 				},
 			}
