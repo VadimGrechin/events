@@ -23,24 +23,24 @@
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.surname"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
+						:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
 						:label="$t('message.registrationForm.surname')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.email"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
+						:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
 						label="e-mail"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.company')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.position')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
+						:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 						:label="$t('message.registrationForm.phone')"></v-text-field>
 					
 					<!-- Согласие на использование данных -->
@@ -120,7 +120,7 @@ export default {
 				const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 				return emailPattern.test(v) || msg
 			},
-			phone: (v, msg) => (/(\+\d{7,12})$/.test(v) || !v) || msg,
+			phone: (v, msg) => (/(\+\d{11,15})$/.test(v) || !v) || msg,
 			company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
 			position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
 			length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
