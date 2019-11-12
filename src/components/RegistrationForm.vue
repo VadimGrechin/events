@@ -23,24 +23,24 @@
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.surname"
-						:rules="[rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
 						:label="$t('message.registrationForm.surname')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.email"
-						:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
 						label="e-mail"
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
-						:rules="[rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.company')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.position')"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
-						:rules="[rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
+						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 						:label="$t('message.registrationForm.phone')"></v-text-field>
 					
 					<!-- Согласие на использование данных -->
@@ -62,7 +62,7 @@
 							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
 				</v-form>
 				<!-- Сообщение -->
-				<message v-if="message" :titlemessage="message" :message="messageadd"></message>
+				<message v-if="message" :titlemessage="message" :message="messageContent"></message>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -137,7 +137,7 @@ export default {
 			position: ''
 		},
 		message: '',
-		messageadd: '',
+		messageContent: '',
 		token: '',
 		isVerified: false
 	}) ,
@@ -200,7 +200,7 @@ export default {
 				if (isSaved) {
 					//this.message = 'Регистрация прошла успешно!'
 					this.message = this.$t('message.registrationForm.registrationSuccess')
-					this.messageadd = this.$t('message.registrationForm.registrationSuccessAdd')
+					this.messageContent = this.$t('message.registrationForm.registrationSuccessAdd')
 				} else {
 					//this.message = 'Данные регистрации не были сохранены.'
 					this.message = this.$t('message.registrationPage.youHaveRegistration')
