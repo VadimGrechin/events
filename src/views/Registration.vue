@@ -107,7 +107,7 @@ export default {
 				return 'noparams'
 			}
 			if (params.eventid && !params.personid) {
-				eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.eventid)
+				eventidIsCorrect = this.testGuid(params.eventid)
 				if (eventidIsCorrect) {
 					return 'nosecondparams'
 				} else {
@@ -115,8 +115,8 @@ export default {
 				}
 			}
 			
-			eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.eventid)
-			personidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(params.personid)
+			eventidIsCorrect = this.testGuid(params.eventid)
+			personidIsCorrect = this.testGuid(params.personid)
 			
 			if (!eventidIsCorrect && !personidIsCorrect) {
 				return 'bothparamsnotcorrect'
@@ -128,6 +128,9 @@ export default {
 				return 'secondparamnotcorrect'
 			}
 			return 'ok'
+		},
+		testGuid(guid) {
+			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
 		},
 		// Получить информция о событии _REGFORM.GETEVENTINFO
 		getEventInfo(eventid, lang) {

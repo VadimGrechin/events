@@ -1,6 +1,5 @@
 <template>
 	<v-content>
-		<a v-if="link" :href="link"></a>
 		<message v-if="messageTitle" :titlemessage="messageTitle" :message="messageContent"></message>
 	</v-content>
 </template>
@@ -10,20 +9,102 @@ import axios from 'axios'
 import Message from './Message'
 
 export default {
-	name: '',
+	name: 'download',
+	components: {Message},
 	data() {
 		return {
+			eventGuid: '',
+			personGuid: '',
 			link: '',
 			messageTitle: '',
 			messageContent: ''
 		}
 	},
 	created() {
+		document.title = 'Загрузка файла'
 		// получить параметры строки запроса
-		
-	},
-	metods: {
+		this.eventGuid = this.$route.params.eventGuid
+		this.personGuid = this.$route.params.personGuid
 
+		// eslint-disable-next-line
+		debugger
+		// выполнить проверку параметров
+		var checkParams = this.checkParams(this.eventGuid, this.personGuid)
+
+		switch (checkParams) {
+			case 'noparams':
+				this.messageTitle = 'Ошибка'
+				this.messageContent = 'В ссылке нет всех параметров!'
+				break;
+			case 'firstParamWrong':
+				this.messageTitle = 'Ошибка'
+				this.messageContent = '1-й параметр некорректен!'
+				break;
+			case 'secondParamWrong':
+				this.messageTitle = 'Ошибка'
+				this.messageContent = '2-й параметр некорректен!'
+				break;
+			case 'ok':
+				// получить ссылку на файл
+				this.getLinkForDownload(this.eventGuid, this.personGuid)
+				break;
+		}
+	},
+	mounted() {
+	},
+
+	methods: {
+		checkParams: function( eventGuid, personGuid ) {
+			// проверка наличия
+			if (!(eventGuid && personGuid)) {
+				return 'noparams'
+			}
+			// проверка корректности
+			var eventGuidIsCorrect = this.testGuid(eventGuid)
+			var personGuidIdCorrect = this.testGuid(eventGuid)
+			if (eventGuidIsCorrect && personGuidIdCorrect) {
+				return 'ok'
+			}
+			if (!eventGuidIsCorrect) {
+				return 'firstParamWrong'
+			} else {
+				return 'secondParamWrong'
+			}
+
+		},
+		getLinkForDownload( eventGuid, personGuid ) {
+			axios.post(window.myConfig.WsUrl, {
+				calcId: '_REGFORM.GETFILELINK',
+				args: JSON.stringify({eventGuid, personGuid}),
+				ticket: ''
+			})
+			.then(response => {
+				var resp = JSON.parse(response.data.d)
+				if (resp.success) {
+					if(resp.link) {
+						window.location = resp.link
+					} else {
+						// link unavailable
+						this.messageTitle = 'Ссылка сейчас недоступна!'
+					}
+				} else {
+					this.messageTitle = resp.message
+				}
+			})
+			.catch(error => {
+				if (error.response) {
+					this.messageContent = 'Status: ' + error.response.status + '<br>' + error.response.header
+				} else if (error.request) {
+					this.messageContent = error.request
+				} else {
+					this.messageContent = error.message
+				}
+				this.messageTitle = 'Ошибка!'
+			})
+		},
+		testGuid(guid) {
+			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
+		}
 	}
 }
 </script>
