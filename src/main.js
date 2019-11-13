@@ -7,6 +7,7 @@ import Registration from './views/Registration.vue'
 import ErrorPage from './views/ErrorPage.vue'
 import Message from './components/Message.vue'
 import GoEvent from './components/GoEvent.vue'
+import Download from './components/Download.vue'
 import Ws from './api/webCalculation.js'
 
 import {i18n} from './plugins/i18n'
@@ -41,6 +42,11 @@ const routes = [
     path: '/goevent/:eventGuid/:personGuid?',
     name: 'goevent',
     component: GoEvent,
+  },
+  {
+    path: '/download/:eventGuid/:personGuid',
+    name: 'download',
+    component: Download,
   },
   {
     path: '*',

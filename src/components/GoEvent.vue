@@ -18,10 +18,10 @@ export default {
 		}
 	},
 	created() {
+		document.title = 'Подключение к мероприятию'
 		// выполнить анализ параметров строки запроса
 		this.eventGuid = this.$route.params.eventGuid
 		this.personGuid = this.$route.params.personGuid ? this.$route.params.personGuid : ''
-
 		// Проверить параметры
 		var paramsResult = this.checkParams(this.eventGuid , this.personGuid)
 		switch (paramsResult) {
@@ -79,13 +79,13 @@ export default {
 			var personidIsMissing = true
 			// Параметр отсутствует 
 			if (eventGuid) {
-				eventidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(eventGuid)
+				eventidIsCorrect = this.testGuid(eventGuid)
 			} else {
 				return 'eventGuidMissing'
 			}
 
 			if (personGuid) {
-				personidIsCorrect = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(personGuid)
+				personidIsCorrect = this.testGuid(personGuid)
 				personidIsMissing = false
 			}
 			// Корректность параметров
@@ -102,6 +102,9 @@ export default {
 			} else {
 				return 'eventGuidWrong'
 			}
+		},
+		testGuid: function(guid) {
+			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
 		}
 	}
 }
