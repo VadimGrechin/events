@@ -34,11 +34,11 @@
 						required></v-text-field>
 					<v-text-field
 						v-model="registrationData.company"
-						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.company(registrationData.company, warnings.rightCompanyName), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
 					<v-text-field
 						v-model="registrationData.position"
-						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.position(registrationData.position, warnings.rightPositionName), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
+						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 						:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
 					<v-text-field
 						v-model="registrationData.phone"
@@ -117,14 +117,14 @@ export default {
 		lazy: false,
 		rules: {
 			required: (v, msg) => !!v || msg,
-			name: (v, msg) => /[a-zA-zа-яА-ЯІіЇїЄєҐґ']/.test(v) || msg,
+			name: (v, msg) => /[a-zA-Zа-яА-ЯІіЇїЄєҐґ' ]/.test(v) || msg,
 			email: (v, msg) => {
 				const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 				return emailPattern.test(v) || msg
 			},
-			phone: (v, msg) => (/(\+\d{11,15})$/.test(v) || !v) || msg,
-			company: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
-			position: (v, msg) => (/^[0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-zА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
+			phone: (v, msg) => (/(\+[\d ()-]{10,})$/.test(v) || !v) || msg,
+			company: (v, msg) => (/^[0-9a-zA-ZА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-ZА-Яа-яЁёІіЇїЄєҐґ' &]|-|\.)*$/.test(v) || !v) || msg,
+			position: (v, msg) => (/^[0-9a-zA-ZА-Яа-яЁёІіЇїЄєҐґ]*([0-9a-zA-ZА-Яа-яЁёІіЇїЄєҐґ' ]|-|\.)*$/.test(v) || !v) || msg,
 			length50: (v, msg) => (v && v.length <= 50 || !v) || msg,
 			length100: (v, msg) => (v && v.length <= 100 || !v) || msg,
 		},
