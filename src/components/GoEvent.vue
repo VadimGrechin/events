@@ -56,15 +56,21 @@ export default {
 					if (link) {
 						window.location = link
 					} else {
-						this.messageTitle = 'Ссылка сейчас не доаступна!'
+						this.messageTitle = 'Ссылка сейчас не доступна!'
 					}
 				} else {
 					this.messageTitle = resp.message
 				}
 			})
 			.catch(error => {
+				if (error.response) {
+					this.messageContent = 'Status: ' + error.response.status + '<br>' + error.response.header
+				} else if (error.request) {
+					this.messageContent = error.request
+				} else {
+					this.messageContent = error.message
+				}
 				this.messageTitle = 'Ошибка!'
-				this.messageContent = error.message
 			})
 		},
 		checkParams: function(eventGuid, personGuid) {
