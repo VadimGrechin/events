@@ -43,6 +43,11 @@ const routes = [
     component: GoEvent,
   },
   {
+    path: '/download/:eventGuid/:personGuid',
+    name: 'download',
+    component: Download,
+  },
+  {
     path: '*',
     name: 'notvalidlink',
     component: ErrorPage,
