@@ -56,7 +56,7 @@ export default {
 					if (link) {
 						window.location = link
 					} else {
-						this.messageTitle = 'Ссылка сейчас не доступна!'
+						this.messageTitle = 'Ссылка сейчас недоступна!'
 					}
 				} else {
 					this.messageTitle = resp.message
