@@ -24,6 +24,7 @@
 import axios from 'axios'
 import RegistrationForm from '../components/RegistrationForm'
 import Message from '../components/Message'
+import {testGuid} from '../helpers/chekcer.js'
 
 export default {
 	name: 'registration',
@@ -107,7 +108,7 @@ export default {
 				return 'noparams'
 			}
 			if (params.eventid && !params.personid) {
-				eventidIsCorrect = this.testGuid(params.eventid)
+				eventidIsCorrect = testGuid(params.eventid) //this.testGuid(params.eventid)
 				if (eventidIsCorrect) {
 					return 'nosecondparams'
 				} else {
@@ -115,8 +116,8 @@ export default {
 				}
 			}
 			
-			eventidIsCorrect = this.testGuid(params.eventid)
-			personidIsCorrect = this.testGuid(params.personid)
+			eventidIsCorrect = testGuid(params.eventid) //this.testGuid(params.eventid)
+			personidIsCorrect = testGuid(params.personid) //this.testGuid(params.personid)
 			
 			if (!eventidIsCorrect && !personidIsCorrect) {
 				return 'bothparamsnotcorrect'
@@ -129,9 +130,9 @@ export default {
 			}
 			return 'ok'
 		},
-		testGuid(guid) {
-			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
-		},
+		// testGuid(guid) {
+		// 	return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
+		// },
 		// Получить информция о событии _REGFORM.GETEVENTINFO
 		getEventInfo(eventid, lang) {
 			axios.post(window.myConfig.WsUrl, {

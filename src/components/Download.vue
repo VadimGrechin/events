@@ -7,6 +7,7 @@
 <script>
 import axios from 'axios'
 import Message from './Message'
+import {testGuid} from '../helpers/chekcer.js'
 
 export default {
 	name: 'download',
@@ -60,8 +61,8 @@ export default {
 				return 'noparams'
 			}
 			// проверка корректности
-			var eventGuidIsCorrect = this.testGuid(eventGuid)
-			var personGuidIdCorrect = this.testGuid(eventGuid)
+			var eventGuidIsCorrect = testGuid(eventGuid) // this.testGuid(eventGuid)
+			var personGuidIdCorrect = testGuid(eventGuid) // this.testGuid(eventGuid)
 			if (eventGuidIsCorrect && personGuidIdCorrect) {
 				return 'ok'
 			}
@@ -102,9 +103,9 @@ export default {
 				this.messageTitle = 'Ошибка!'
 			})
 		},
-		testGuid(guid) {
-			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
-		}
+		// testGuid(guid) {
+		// 	return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
+		// }
 	}
 }
 </script>

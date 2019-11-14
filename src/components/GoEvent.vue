@@ -5,6 +5,8 @@
 <script>
 import axios from 'axios'
 import Message from '../components/Message'
+import {testGuid} from '../helpers/chekcer.js'
+import {getIntIP, getExtIP, getClientData} from '../helpers/clientinfo.js'
 
 export default {
 	name: 'goevent',
@@ -13,8 +15,17 @@ export default {
 		return {
 			eventGuid: '',
 			personGuid: '',
+			clientInfo: {
+				intIP: '',
+				extIP: '',
+				os: '',
+				browser: '',
+				mobile: '',
+				fullUserAgent: ''
+			},
 			messageTitle: null,
-			messageContent: null
+			messageContent: null,
+			timeEnd: false
 		}
 	},
 	created() {
@@ -22,7 +33,6 @@ export default {
 		// выполнить анализ параметров строки запроса
 		this.eventGuid = this.$route.params.eventGuid
 		this.personGuid = this.$route.params.personGuid ? this.$route.params.personGuid : ''
-		// Проверить параметры
 		var paramsResult = this.checkParams(this.eventGuid , this.personGuid)
 		switch (paramsResult) {
 			case 'eventGuidMissing':
@@ -32,12 +42,15 @@ export default {
 				this.messageTitle = 'Параметр в ссылке некорректен!'
 				break;
 			case 'personGuidWrong':
-				this.personGuid = ''
-				this.getEventLink(this.eventGuid , this.personGuid)
+				this.getClientInfo()
+				//this.sendClientInfo(this.eventGuid , this.personGuid, this.clientInfo)
+				//this.personGuid = ''
+				//this.getEventLink(this.eventGuid , this.personGuid)
 				break;
 			case 'ok':
-				// получить ссылку на event
-				this.getEventLink(this.eventGuid , this.personGuid)
+				this.getClientInfo()
+				//this.sendClientInfo(this.eventGuid , this.personGuid, this.clientInfo)
+				//this.getEventLink(this.eventGuid , this.personGuid)
 				break;
 		}
 	},
@@ -79,13 +92,13 @@ export default {
 			var personidIsMissing = true
 			// Параметр отсутствует 
 			if (eventGuid) {
-				eventidIsCorrect = this.testGuid(eventGuid)
+				eventidIsCorrect = testGuid(eventGuid)
 			} else {
 				return 'eventGuidMissing'
 			}
 
 			if (personGuid) {
-				personidIsCorrect = this.testGuid(personGuid)
+				personidIsCorrect = testGuid(personGuid)
 				personidIsMissing = false
 			}
 			// Корректность параметров
@@ -96,6 +109,7 @@ export default {
 					if (personidIsCorrect) {
 						return 'ok'
 					} else {
+						this.personGuid = ''
 						return 'personGuidWrong'
 					}
 				}
@@ -103,8 +117,53 @@ export default {
 				return 'eventGuidWrong'
 			}
 		},
-		testGuid: function(guid) {
-			return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
+		getClientInfo() {
+			this.clientInfo = getClientData()
+			let context = this
+			getIntIP()
+			.then(function (response) {
+				context.clientInfo.intIP = response ? response : 'unavailable'
+			})
+
+			getExtIP()
+			.then(function (response) {
+				context.clientInfo.extIP = response ? response : 'unavailable'
+			})
+			var timeout = 2300
+			setTimeout(this.sendClientInfo, timeout, this.eventGuid , this.personGuid, this.clientInfo)
+			// while (!(this.clientInfo.intIP && this.clientInfo.extIP)) {
+			// 	if (this.timeEnd) {
+			// 		this.clientInfo.intIP = 'unavailabel'
+			// 		this.clientInfo.extIP = 'unavailabel'
+			// 		break
+			// 	}
+			// }
+
+			// let context = this
+			// getIntIPa()
+			// .then(result => {
+			// 	context.clientInfo.intIP = result
+			// 	getExtIP().then( result =>
+			// 		context.clientInfo.extIP = result
+			// 	)
+			// 	})
+
+			// this.clientInfo.extIP = getExtIP()
+			// получить информацию о браузере и ОС
+			// getClientData(this.info)
+			// getClientData()
+			// .then(result => {
+			// 	context.clientInfo = result
+			// })
+		},
+		sendClientInfo(eventGuid , personGuid, clientInfo) {
+			alert(JSON.stringify(clientInfo))
+			axios.post(window.myConfig.WsUrl, {
+				calcId: '_REGFORM.SAVECLIENTINFO',
+				args: JSON.stringify({eventGuid , personGuid, clientInfo}),
+				ticket: ''
+			})
+			this.getEventLink(eventGuid, personGuid)
 		}
 	}
 }
