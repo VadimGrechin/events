@@ -129,7 +129,7 @@ export default {
 			.then(function (response) {
 				context.clientInfo.extIP = response ? response : 'unavailable'
 			})
-			var timeout = 2300
+			var timeout = window.myConfig.timeout
 			setTimeout(this.sendClientInfo, timeout, this.eventGuid , this.personGuid, this.clientInfo)
 			// while (!(this.clientInfo.intIP && this.clientInfo.extIP)) {
 			// 	if (this.timeEnd) {
