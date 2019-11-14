@@ -157,7 +157,6 @@ export default {
 			// })
 		},
 		sendClientInfo(eventGuid , personGuid, clientInfo) {
-			alert(JSON.stringify(clientInfo))
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.SAVECLIENTINFO',
 				args: JSON.stringify({eventGuid , personGuid, clientInfo}),
