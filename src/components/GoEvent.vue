@@ -56,10 +56,10 @@ export default {
 	},
 	methods: {
 		// 
-		getEventLink: function (eventGuid, personGuid) {
+		getEventLink: function (eventGuid, personGuid, clientInfo) {
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.GOEVENT',
-				args: JSON.stringify({eventGuid, personGuid}),
+				args: JSON.stringify({eventGuid , personGuid, clientInfo}),
 				ticket: ''
 			})
 			.then( response => {
@@ -157,12 +157,12 @@ export default {
 			// })
 		},
 		sendClientInfo(eventGuid , personGuid, clientInfo) {
-			axios.post(window.myConfig.WsUrl, {
-				calcId: '_REGFORM.SAVECLIENTINFO',
-				args: JSON.stringify({eventGuid , personGuid, clientInfo}),
-				ticket: ''
-			})
-			this.getEventLink(eventGuid, personGuid)
+			// axios.post(window.myConfig.WsUrl, {
+			// 	calcId: '_REGFORM.SAVECLIENTINFO',
+			// 	args: JSON.stringify({eventGuid , personGuid, clientInfo}),
+			// 	ticket: ''
+			// })
+			this.getEventLink(eventGuid, personGuid, clientInfo)
 		}
 	}
 }
