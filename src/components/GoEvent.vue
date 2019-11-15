@@ -42,15 +42,11 @@ export default {
 				this.messageTitle = 'Параметр в ссылке некорректен!'
 				break;
 			case 'personGuidWrong':
+				this.personGuid = ''
 				this.getClientInfo()
-				//this.sendClientInfo(this.eventGuid , this.personGuid, this.clientInfo)
-				//this.personGuid = ''
-				//this.getEventLink(this.eventGuid , this.personGuid)
 				break;
 			case 'ok':
 				this.getClientInfo()
-				//this.sendClientInfo(this.eventGuid , this.personGuid, this.clientInfo)
-				//this.getEventLink(this.eventGuid , this.personGuid)
 				break;
 		}
 	},
@@ -59,7 +55,7 @@ export default {
 		getEventLink: function (eventGuid, personGuid, clientInfo) {
 			axios.post(window.myConfig.WsUrl, {
 				calcId: '_REGFORM.GOEVENT',
-				args: JSON.stringify({eventGuid , personGuid, clientInfo}),
+				args: JSON.stringify({eventGuid, personGuid, clientInfo}),
 				ticket: ''
 			})
 			.then( response => {
@@ -130,39 +126,7 @@ export default {
 				context.clientInfo.extIP = response ? response : 'unavailable'
 			})
 			var timeout = window.myConfig.timeout
-			setTimeout(this.sendClientInfo, timeout, this.eventGuid , this.personGuid, this.clientInfo)
-			// while (!(this.clientInfo.intIP && this.clientInfo.extIP)) {
-			// 	if (this.timeEnd) {
-			// 		this.clientInfo.intIP = 'unavailabel'
-			// 		this.clientInfo.extIP = 'unavailabel'
-			// 		break
-			// 	}
-			// }
-
-			// let context = this
-			// getIntIPa()
-			// .then(result => {
-			// 	context.clientInfo.intIP = result
-			// 	getExtIP().then( result =>
-			// 		context.clientInfo.extIP = result
-			// 	)
-			// 	})
-
-			// this.clientInfo.extIP = getExtIP()
-			// получить информацию о браузере и ОС
-			// getClientData(this.info)
-			// getClientData()
-			// .then(result => {
-			// 	context.clientInfo = result
-			// })
-		},
-		sendClientInfo(eventGuid , personGuid, clientInfo) {
-			// axios.post(window.myConfig.WsUrl, {
-			// 	calcId: '_REGFORM.SAVECLIENTINFO',
-			// 	args: JSON.stringify({eventGuid , personGuid, clientInfo}),
-			// 	ticket: ''
-			// })
-			this.getEventLink(eventGuid, personGuid, clientInfo)
+			setTimeout(this.getEventLink, timeout, this.eventGuid , this.personGuid, this.clientInfo)
 		}
 	}
 }
