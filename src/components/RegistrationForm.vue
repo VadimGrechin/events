@@ -10,59 +10,88 @@
 				</v-card>
 			</v-flex>
 
-			<v-flex md6 xs12 >
-				<h3 v-if="!isSended">{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
-				<!-- форма регистрации -->
-				<v-form v-if="!message"
-							ref=form
-							v-model="valid"
-							:lazy-validation="lazy">
-					<!-- Поля -->
-					<v-text-field
-						v-model="registrationData.name"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.name') + ' *'"
-						required></v-text-field>
-					<v-text-field
-						v-model="registrationData.surname"
-						:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.surname') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.email"
-						:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
-						label="e-mail *"
-						required></v-text-field>
-					<v-text-field
-						v-model="registrationData.company"
-						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.position"
-						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.phone"
-						:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
-						:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
-					
-					<!-- Согласие на использование данных -->
-					<v-checkbox
-						v-model="isConsent"
-						:label="$t('message.registrationForm.consentProcessingPersData')">
-					</v-checkbox>
+			<v-flex md6 xs12>
+				<v-container>
+					<v-layout column>
+						<v-flex>
+							<!-- форма регистрации -->
+							<v-form v-if="!message"
+										ref=form
+										v-model="valid"
+										:lazy-validation="lazy">
 
-					<!-- reCAPTCHA -->
-					<vue-recaptcha 
-						ref="recaptcha"
-						:sitekey="sitekey"
-						@verify="captchaResponse"
-						@expired="onCaptchaExpired"></vue-recaptcha>
+								<h3 v-if="!isSended" class="form-head-message">
+									{{$t('message.registrationForm.obligatoryFieldMessage')}}
+								</h3>
 
-					<v-btn class="mt-2"
-							:disabled="!(valid && isConsent && captchaVerify)"
-							color="success"
-							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
-				</v-form>
+								<!-- Поля -->
+								<v-text-field
+									v-model="registrationData.name"
+									:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
+									:label="$t('message.registrationForm.name') + ' *'"
+									required></v-text-field>
+								<v-text-field
+									v-model="registrationData.surname"
+									:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
+									:label="$t('message.registrationForm.surname') + ' *'"></v-text-field>
+								<v-text-field
+									v-model="registrationData.email"
+									:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
+									label="e-mail *"
+									required></v-text-field>
+								<v-text-field
+									v-model="registrationData.company"
+									:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
+									:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
+								<v-text-field
+									v-model="registrationData.position"
+									:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
+									:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
+
+								<v-text-field
+									v-model="registrationData.phone"
+									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
+									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
+
+								<div v-if="!phoneValid" style="color: red;">Введите номер телефона</div>
+								<!-- Номер телефона -->
+								<VuePhoneNumberInput 
+									v-model="registrationData.phone"
+									size="lg"
+									required
+									color="#FF3907"
+									:default-country-code="defaultCountry"
+									:only-countries="['UA','RU','BL']"
+									:error="hasErrorActive"
+									:translations="translations"
+									@update="phoneUpdate" />
+
+								<div v-if="phoneValid" style="color: green;">{{phoneData.e164}}</div>
+
+								<!-- Согласие на использование данных -->
+								<v-checkbox
+									v-model="isConsent"
+									:label="$t('message.registrationForm.consentProcessingPersData')">
+								</v-checkbox>
+
+								<!-- reCAPTCHA -->
+								<vue-recaptcha 
+									ref="recaptcha"
+									:sitekey="sitekey"
+									@verify="captchaResponse"
+									@expired="onCaptchaExpired"></vue-recaptcha>
+
+								<v-btn class="mt-2"
+										:disabled="!(valid && isConsent && captchaVerify)"
+										color="success"
+										@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
+
+							</v-form>
+						</v-flex>
+					</v-layout>
+				</v-container>
+
+
 				<!-- Сообщение -->
 				<message v-if="message" :titlemessage="message" :message="messageContent"></message>
 			</v-flex>
@@ -72,16 +101,23 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
+
+import VuePhoneNumberInput from 'vue-phone-number-input'
+import 'vue-phone-number-input/dist/vue-phone-number-input.css'
+
+Vue.component('vue-phone-number-input', VuePhoneNumberInput)
 
 export default {
 	name: 'registration-form',
 	props: [ 'eventInfo', 'personInfo', 'idparams' ],
 	components: {
 		Message,
-		VueRecaptcha
+		VueRecaptcha,
+		VuePhoneNumberInput
 	},
 	created() {
 		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
@@ -106,12 +142,16 @@ export default {
 			this.registrationData.phone = this.personInfo.phone
 		}
 	},
-	updated() {
-		// if (!this.valid) {
-		// 	this.isConsent = false
-		// }
-	},
 	data: () => ({
+		defaultCountry: 'UA',
+		translations: {
+			countrySelectorLabel: 'Код страны',
+      countrySelectorError: 'Выбрать страну',
+      phoneNumberLabel: 'Номер телефона',
+      example: 'Пример :'
+		},
+		hasErrorActive: false,
+		phoneData: {},
 		lang: '',
 		valid: true,
 		lazy: false,
@@ -145,6 +185,9 @@ export default {
 		isSended: false
 	}) ,
 	methods: {
+		phoneUpdate( payload ) {
+			this.phoneData = payload
+		},
 		// reCAPTCHA response
 		captchaResponse(recaptchaToken) {
 			this.token = recaptchaToken
@@ -229,6 +272,9 @@ export default {
 		},
 		captchaVerify() {
 			return this.isVerified
+		},
+		phoneValid() {
+			return this.phoneData.isValid ? this.phoneData.isValid : false
 		}
 	}
 }
@@ -237,5 +283,9 @@ export default {
 <style >
 .text-word-wrap {
 	word-break: normal;
+}
+.form-head-message {
+	margin-top: 1em;
+	margin-bottom: 1em; 
 }
 </style>
