@@ -12,7 +12,6 @@
 
 			<v-flex md6 xs12>
 				<v-container>
-					<v-layout column>
 						<v-flex>
 							<!-- форма регистрации -->
 							<v-form v-if="!message"
@@ -53,7 +52,7 @@
 									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
 
-								<div v-if="!phoneValid" style="color: red;">Введите номер телефона</div>
+								<div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
 								<!-- Номер телефона -->
 								<VuePhoneNumberInput 
 									v-model="registrationData.phone"
@@ -65,8 +64,6 @@
 									:error="hasErrorActive"
 									:translations="translations"
 									@update="phoneUpdate" />
-
-								<div v-if="phoneValid" style="color: green;">{{phoneData.e164}}</div>
 
 								<!-- Согласие на использование данных -->
 								<v-checkbox
@@ -88,9 +85,7 @@
 
 							</v-form>
 						</v-flex>
-					</v-layout>
 				</v-container>
-
 
 				<!-- Сообщение -->
 				<message v-if="message" :titlemessage="message" :message="messageContent"></message>
@@ -120,7 +115,8 @@ export default {
 		VuePhoneNumberInput
 	},
 	created() {
-		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
+		this.lang = window.myConfig.lang
+		this.dafaultCountry = this.lang === 'uk' ? 'UA' : this.lang.toUpperCase()
 
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
 		this.warnings.nameMastConsistsLettersOnly = this.$t('message.registrationForm.nameMastConsistsLettersOnly')
@@ -130,6 +126,10 @@ export default {
 		this.warnings.rightPositionName = this.$t('message.registrationForm.rightPositionName')
 		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
 		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
+		this.translations.countrySelectorLabel = this.$t('message.registrationForm.countrySelectorLabel')
+		this.translations.countrySelectorError = this.$t('message.registrationForm.countrySelectorError')
+		this.translations.phoneNumberLabel = this.$t('message.registrationForm.phoneNumberLabel')
+		this.translations.example = this.$t('message.registrationForm.example')
 	},
 	mounted() {
 		// Если есть персональные данные заполнить форму
@@ -187,6 +187,7 @@ export default {
 	methods: {
 		phoneUpdate( payload ) {
 			this.phoneData = payload
+			this.registrationData.phone = this.phoneData.formattedNumber
 		},
 		// reCAPTCHA response
 		captchaResponse(recaptchaToken) {
@@ -273,7 +274,7 @@ export default {
 		captchaVerify() {
 			return this.isVerified
 		},
-		phoneValid() {
+		phoneIsValid() {
 			return this.phoneData.isValid ? this.phoneData.isValid : false
 		}
 	}
@@ -287,5 +288,11 @@ export default {
 .form-head-message {
 	margin-top: 1em;
 	margin-bottom: 1em; 
+}
+.phoneValid {
+	color: rgba(0, 0, 0, 0.87)
+}
+.phoneNotValid {
+	color: red;
 }
 </style>

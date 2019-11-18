@@ -1,20 +1,22 @@
 <template>
-	<v-container>
+	<v-container fluid>
 		<v-layout column>
 			<!-- Название события -->
-			<v-flex xs-12 v-if="eventInfo">
-				<h1 class="text-md-center text-sm-center text-xs-center">
+			<v-flex xs-12 v-if="eventInfo" >
+				<h1 class="text-lg-center text-md-center text-sm-center text-xs-center">
 					{{eventInfo.eventTitle}}</h1>
 			</v-flex>
-			<v-layout my-1 row>
-				<!-- Регистрация -->
-				<registration-form v-if="goRegistration && eventInfo && personInfoComp !== undefined" 
-												:event-info="eventInfo"
-												:person-info="personInfoComp"
-												:idparams="params"></registration-form>
-				<!-- сообщение/ сообщение об ошибке -->
-				<message v-if="showMessage" :titlemessage="message"></message>
-			</v-layout>
+			<v-flex xs-12>
+				<v-layout my-1 row>
+					<!-- Регистрация -->
+					<registration-form v-if="goRegistration && eventInfo && personInfoComp !== undefined" 
+													:event-info="eventInfo"
+													:person-info="personInfoComp"
+													:idparams="params"></registration-form>
+					<!-- сообщение/ сообщение об ошибке -->
+					<message v-if="showMessage" :titlemessage="message"></message>
+				</v-layout>
+			</v-flex>
 		</v-layout>
 	</v-container>
 </template>
@@ -53,7 +55,7 @@ export default {
 	created() {
 		this.params.eventid = this.$route.params.eventGuid
 		this.params.personid = this.$route.params.personGuid
-		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
+		this.lang = window.myConfig.lang
 
 		var paramsCheckResult = this.checkParams(this.params)
 		

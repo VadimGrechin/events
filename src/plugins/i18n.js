@@ -41,6 +41,10 @@ const	messages = {
 					registrationSuccess: 'Спасибо за регистрацию!',
 					registrationSuccessAdd: 'Вскоре Вы получите электронное письмо с подтверждением, в котором будут указаны подробности о предстоящем мероприятии.<br>Мы с нетерпением ждем встречи с Вами.',
 					registratonFailed: 'Данные регистрации не были сохранены.',
+					countrySelectorLabel: 'Код страны',
+					countrySelectorError: 'Выбрать страну',
+					phoneNumberLabel: 'Номер телефона',
+					example: 'Пример: '
 				}	
 			}
 		},
@@ -81,6 +85,10 @@ const	messages = {
 					registrationSuccess: 'Дякуємо за реєстрацію!',
 					registrationSuccessAdd: 'Незабаром Ви отримаєте електронного листа з підтверженням, в якому будуть вказані подробиці про майбутню подію.<br>Ми з нетерпінням чекаємо на зустріч з Вами.',
 					registratonFailed: 'Дані реєстрації не були збережені.',
+					countrySelectorLabel: 'Код країни',
+					countrySelectorError: 'Обрати країну',
+					phoneNumberLabel: 'Номер телефону',
+					example: 'Приклад: '
 				},
 			}
 		}
