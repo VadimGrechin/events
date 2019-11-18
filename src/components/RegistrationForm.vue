@@ -84,7 +84,7 @@ export default {
 		VueRecaptcha
 	},
 	created() {
-		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
+		this.lang = window.myConfig.lang
 
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
 		this.warnings.nameMastConsistsLettersOnly = this.$t('message.registrationForm.nameMastConsistsLettersOnly')
@@ -107,9 +107,6 @@ export default {
 		}
 	},
 	updated() {
-		// if (!this.valid) {
-		// 	this.isConsent = false
-		// }
 	},
 	data: () => ({
 		lang: '',
@@ -200,14 +197,19 @@ export default {
 				ticket: ''
 			})
 			.then(response => {
-				var isSaved = response.data.d === 'True' ? true : false
+				var resp = JSON.parse(response.data.d)
+				var isSaved = resp.success
 				if (isSaved) {
 					//this.message = 'Регистрация прошла успешно!'
 					this.message = this.$t('message.registrationForm.registrationSuccess')
 					this.messageContent = this.$t('message.registrationForm.registrationSuccessAdd')
 				} else {
 					//this.message = 'Данные регистрации не были сохранены.'
-					this.message = this.$t('message.registrationPage.youHaveRegistration')
+					if(resp.message) {
+						this.message = resp.message
+					} else {
+						this.message = this.$t('message.registrationPage.youHaveRegistration')
+					}
 				}
 			})
 			.catch(error => {

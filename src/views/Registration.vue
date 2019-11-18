@@ -53,7 +53,7 @@ export default {
 	created() {
 		this.params.eventid = this.$route.params.eventGuid
 		this.params.personid = this.$route.params.personGuid
-		this.lang = this.$route.query ? (this.$route.query.lang.toLowerCase() !== 'uk' ? 'ru' : 'uk') : 'ru'
+		this.lang = window.myConfig.lang
 
 		var paramsCheckResult = this.checkParams(this.params)
 		
