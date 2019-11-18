@@ -68,7 +68,8 @@ export default {
 						this.messageTitle = 'Ссылка сейчас недоступна!'
 					}
 				} else {
-					this.messageTitle = resp.message
+					this.messageTitle = resp.messageTitle
+					this.messageContent = resp.messageContent
 				}
 			})
 			.catch(error => {
