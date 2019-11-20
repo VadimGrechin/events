@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid>
-		<v-layout align-center justify-end column fill-height>
+		<v-layout align-center justify-end column fill-height class="border-frame">
 			<v-flex xs-12>
 				<h2 class="text-xs-center">{{titlemessage}}</h2>
 			</v-flex>
@@ -24,6 +24,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.border-frame{
+	border: dotted 1px blue;
+}
 </style>

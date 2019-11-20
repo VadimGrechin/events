@@ -2,7 +2,7 @@
 	<v-container fluid>
 		<v-layout column>
 			<!-- Название события -->
-			<v-flex xs-12 v-if="eventInfo" >
+			<v-flex xs-12 v-if="eventInfo">
 				<h1 class="text-lg-center text-md-center text-sm-center text-xs-center">
 					{{eventInfo.eventTitle}}</h1>
 			</v-flex>
@@ -14,7 +14,7 @@
 													:person-info="personInfoComp"
 													:idparams="params"></registration-form>
 					<!-- сообщение/ сообщение об ошибке -->
-					<message v-if="showMessage" :titlemessage="message"></message>
+					<message v-if="showMessage" :titlemessage="message" class="border-frame"></message>
 				</v-layout>
 			</v-flex>
 		</v-layout>
@@ -224,8 +224,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .light-gray-color {
 	background: #fafafa
+}
+.border-frame{
+	border: dotted 1px blue;
 }
 </style>

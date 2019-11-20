@@ -4,7 +4,7 @@
 			<v-flex md5 xs12>
 				<v-card>
 					<!-- Информация о событии -->
-					<v-card-title primary title>
+					<v-card-title primary title class="border-frame">
 						<div v-html="eventInfo.eventDescription"></div>
 					</v-card-title>
 				</v-card>
@@ -17,13 +17,13 @@
 							<v-form v-if="!message"
 										ref=form
 										v-model="valid"
-										:lazy-validation="lazy">
+										:lazy-validation="lazy"
+										class="border-frame">
 
-								<h3 v-if="!isSended" class="form-head-message">
+								<h3 class="form-head-message">
 									{{$t('message.registrationForm.obligatoryFieldMessage')}}
 								</h3>
 
-								<!-- Поля -->
 								<v-text-field
 									v-model="registrationData.name"
 									:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
@@ -52,9 +52,9 @@
 									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
 
-								<div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
+								<!-- <div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div> -->
 								<!-- Номер телефона -->
-								<VuePhoneNumberInput 
+								<!-- <VuePhoneNumberInput 
 									v-model="registrationData.phone"
 									size="lg"
 									required
@@ -63,7 +63,7 @@
 									:only-countries="['UA','RU','BL']"
 									:error="hasErrorActive"
 									:translations="translations"
-									@update="phoneUpdate" />
+									@update="phoneUpdate" /> -->
 
 								<!-- Согласие на использование данных -->
 								<v-checkbox
@@ -79,7 +79,7 @@
 									@expired="onCaptchaExpired"></vue-recaptcha>
 
 								<v-btn class="mt-2"
-										:disabled="!(valid && isConsent && captchaVerify)"
+										:disabled="!(valid && isConsent && phoneIsValid && captchaVerify)"
 										color="success"
 										@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
 
@@ -96,15 +96,15 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
 
-import VuePhoneNumberInput from 'vue-phone-number-input'
-import 'vue-phone-number-input/dist/vue-phone-number-input.css'
+// import VuePhoneNumberInput from 'vue-phone-number-input'
+// import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
-Vue.component('vue-phone-number-input', VuePhoneNumberInput)
+// Vue.component('vue-phone-number-input', VuePhoneNumberInput)
 
 export default {
 	name: 'registration-form',
@@ -112,7 +112,7 @@ export default {
 	components: {
 		Message,
 		VueRecaptcha,
-		VuePhoneNumberInput
+		// VuePhoneNumberInput
 	},
 	created() {
 		this.lang = window.myConfig.lang
@@ -274,14 +274,14 @@ export default {
 		captchaVerify() {
 			return this.isVerified
 		},
-		phoneIsValid() {
-			return this.phoneData.isValid ? this.phoneData.isValid : false
-		}
+		// phoneIsValid() {
+		// 	return this.phoneData.isValid ? this.phoneData.isValid : false
+		// }
 	}
 }
 </script>
 
-<style >
+<style scoped>
 .text-word-wrap {
 	word-break: normal;
 }
@@ -294,5 +294,8 @@ export default {
 }
 .phoneNotValid {
 	color: red;
+}
+.border-frame{
+	border: dotted 1px blue;
 }
 </style>
