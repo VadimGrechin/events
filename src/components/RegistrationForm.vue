@@ -244,14 +244,19 @@ export default {
 				ticket: ''
 			})
 			.then(response => {
-				var isSaved = response.data.d === 'True' ? true : false
+				var resp = JSON.parse(response.data.d)
+				var isSaved = resp.success
 				if (isSaved) {
 					//this.message = 'Регистрация прошла успешно!'
 					this.message = this.$t('message.registrationForm.registrationSuccess')
 					this.messageContent = this.$t('message.registrationForm.registrationSuccessAdd')
 				} else {
 					//this.message = 'Данные регистрации не были сохранены.'
-					this.message = this.$t('message.registrationPage.youHaveRegistration')
+					if(resp.message) {
+						this.message = resp.message
+					} else {
+						this.message = this.$t('message.registrationPage.youHaveRegistration')
+					}
 				}
 			})
 			.catch(error => {
