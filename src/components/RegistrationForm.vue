@@ -4,7 +4,7 @@
 			<v-flex md5 xs12>
 				<v-card>
 					<!-- Информация о событии -->
-					<v-card-title primary title class="border-frame">
+					<v-card-title primary title>
 						<div v-html="eventInfo.eventDescription"></div>
 					</v-card-title>
 				</v-card>
@@ -17,8 +17,7 @@
 							<v-form v-if="!message"
 										ref=form
 										v-model="valid"
-										:lazy-validation="lazy"
-										class="border-frame">
+										:lazy-validation="lazy">
 
 								<h3 class="form-head-message">
 									{{$t('message.registrationForm.obligatoryFieldMessage')}}
@@ -47,23 +46,23 @@
 									:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 									:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
 
-								<v-text-field
+								<!-- <v-text-field
 									v-model="registrationData.phone"
 									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
-									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
+									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field> -->
 
-								<!-- <div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div> -->
+								<div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
 								<!-- Номер телефона -->
-								<!-- <VuePhoneNumberInput 
+								<VuePhoneNumberInput 
 									v-model="registrationData.phone"
 									size="lg"
 									required
 									color="#FF3907"
 									:default-country-code="defaultCountry"
-									:only-countries="['UA','RU','BL']"
+									:only-countries="countriesList"
 									:error="hasErrorActive"
 									:translations="translations"
-									@update="phoneUpdate" /> -->
+									@update="phoneUpdate" />
 
 								<!-- Согласие на использование данных -->
 								<v-checkbox
@@ -96,15 +95,15 @@
 </template>
 
 <script>
-// import Vue from 'vue'
+import Vue from 'vue'
 import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
 
-// import VuePhoneNumberInput from 'vue-phone-number-input'
-// import 'vue-phone-number-input/dist/vue-phone-number-input.css'
+import VuePhoneNumberInput from 'vue-phone-number-input'
+import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
-// Vue.component('vue-phone-number-input', VuePhoneNumberInput)
+Vue.component('vue-phone-number-input', VuePhoneNumberInput)
 
 export default {
 	name: 'registration-form',
@@ -112,7 +111,7 @@ export default {
 	components: {
 		Message,
 		VueRecaptcha,
-		// VuePhoneNumberInput
+		VuePhoneNumberInput
 	},
 	created() {
 		this.lang = window.myConfig.lang
@@ -144,11 +143,12 @@ export default {
 	},
 	data: () => ({
 		defaultCountry: 'UA',
+		countriesList: ['UA','RU','BY','KZ','PL'],
 		translations: {
-			countrySelectorLabel: 'Код страны',
-      countrySelectorError: 'Выбрать страну',
-      phoneNumberLabel: 'Номер телефона',
-      example: 'Пример :'
+			countrySelectorLabel: '',
+      countrySelectorError: '',
+      phoneNumberLabel: '',
+      example: ''
 		},
 		hasErrorActive: false,
 		phoneData: {},
@@ -274,9 +274,9 @@ export default {
 		captchaVerify() {
 			return this.isVerified
 		},
-		// phoneIsValid() {
-		// 	return this.phoneData.isValid ? this.phoneData.isValid : false
-		// }
+		phoneIsValid() {
+			return this.phoneData.isValid ? this.phoneData.isValid : false
+		}
 	}
 }
 </script>
@@ -294,8 +294,5 @@ export default {
 }
 .phoneNotValid {
 	color: red;
-}
-.border-frame{
-	border: dotted 1px blue;
 }
 </style>

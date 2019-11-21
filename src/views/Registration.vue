@@ -14,7 +14,7 @@
 													:person-info="personInfoComp"
 													:idparams="params"></registration-form>
 					<!-- сообщение/ сообщение об ошибке -->
-					<message v-if="showMessage" :titlemessage="message" class="border-frame"></message>
+					<message v-if="showMessage" :titlemessage="message"></message>
 				</v-layout>
 			</v-flex>
 		</v-layout>
@@ -227,8 +227,5 @@ export default {
 <style scoped>
 .light-gray-color {
 	background: #fafafa
-}
-.border-frame{
-	border: dotted 1px blue;
 }
 </style>
