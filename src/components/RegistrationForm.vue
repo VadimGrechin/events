@@ -10,59 +10,82 @@
 				</v-card>
 			</v-flex>
 
-			<v-flex md6 xs12 >
-				<h3 v-if="!isSended">{{$t('message.registrationForm.obligatoryFieldMessage')}}</h3>
-				<!-- форма регистрации -->
-				<v-form v-if="!message"
-							ref=form
-							v-model="valid"
-							:lazy-validation="lazy">
-					<!-- Поля -->
-					<v-text-field
-						v-model="registrationData.name"
-						:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.name') + ' *'"
-						required></v-text-field>
-					<v-text-field
-						v-model="registrationData.surname"
-						:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
-						:label="$t('message.registrationForm.surname') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.email"
-						:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
-						label="e-mail *"
-						required></v-text-field>
-					<v-text-field
-						v-model="registrationData.company"
-						:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.position"
-						:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
-						:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
-					<v-text-field
-						v-model="registrationData.phone"
-						:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
-						:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
-					
-					<!-- Согласие на использование данных -->
-					<v-checkbox
-						v-model="isConsent"
-						:label="$t('message.registrationForm.consentProcessingPersData')">
-					</v-checkbox>
+			<v-flex md6 xs12>
+				<v-container>
+						<v-flex>
+							<!-- форма регистрации -->
+							<v-form v-if="!message"
+										ref=form
+										v-model="valid"
+										:lazy-validation="lazy">
 
-					<!-- reCAPTCHA -->
-					<vue-recaptcha 
-						ref="recaptcha"
-						:sitekey="sitekey"
-						@verify="captchaResponse"
-						@expired="onCaptchaExpired"></vue-recaptcha>
+								<h3 class="form-head-message">
+									{{$t('message.registrationForm.obligatoryFieldMessage')}}
+								</h3>
 
-					<v-btn class="mt-2"
-							:disabled="!(valid && isConsent && captchaVerify)"
-							color="success"
-							@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
-				</v-form>
+								<v-text-field
+									v-model="registrationData.name"
+									:rules="[rules.required(registrationData.name, warnings.obligatoryWriteIn), rules.name(registrationData.name, warnings.nameMastConsistsLettersOnly), rules.length50(registrationData.name, warnings.lineHasMore50symbols)]"
+									:label="$t('message.registrationForm.name') + ' *'"
+									required></v-text-field>
+								<v-text-field
+									v-model="registrationData.surname"
+									:rules="[rules.required(registrationData.surname, warnings.obligatoryWriteIn), rules.length50(registrationData.surname, warnings.lineHasMore50symbols)]"
+									:label="$t('message.registrationForm.surname') + ' *'"></v-text-field>
+								<v-text-field
+									v-model="registrationData.email"
+									:rules="[rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.required(registrationData.email, warnings.obligatoryWriteIn), rules.email(registrationData.email, warnings.wronEmail)]"
+									label="e-mail *"
+									required></v-text-field>
+								<v-text-field
+									v-model="registrationData.company"
+									:rules="[rules.required(registrationData.company, warnings.obligatoryWriteIn), rules.length100(registrationData.company, warnings.lineHasMore100symbols)]"
+									:label="$t('message.registrationForm.company') + ' *'"></v-text-field>
+								<v-text-field
+									v-model="registrationData.position"
+									:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
+									:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
+
+								<!-- <v-text-field
+									v-model="registrationData.phone"
+									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
+									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field> -->
+
+								<div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
+								<!-- Номер телефона -->
+								<VuePhoneNumberInput 
+									v-model="registrationData.phone"
+									size="lg"
+									required
+									color="#FF3907"
+									:default-country-code="defaultCountry"
+									:only-countries="countriesList"
+									:error="hasErrorActive"
+									:translations="translations"
+									@update="phoneUpdate" />
+
+								<!-- Согласие на использование данных -->
+								<v-checkbox
+									v-model="isConsent"
+									:label="$t('message.registrationForm.consentProcessingPersData')">
+								</v-checkbox>
+
+								<!-- reCAPTCHA -->
+								<vue-recaptcha 
+									ref="recaptcha"
+									:sitekey="sitekey"
+									@verify="captchaResponse"
+									@expired="onCaptchaExpired"></vue-recaptcha>
+
+								<v-btn class="mt-2"
+										:disabled="!(valid && isConsent && phoneIsValid && captchaVerify)"
+										color="success"
+										@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
+
+							</v-form>
+						</v-flex>
+				</v-container>
+
 				<!-- Сообщение -->
 				<message v-if="message" :titlemessage="message" :message="messageContent"></message>
 			</v-flex>
@@ -72,19 +95,27 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
+
+import VuePhoneNumberInput from 'vue-phone-number-input'
+import 'vue-phone-number-input/dist/vue-phone-number-input.css'
+
+Vue.component('vue-phone-number-input', VuePhoneNumberInput)
 
 export default {
 	name: 'registration-form',
 	props: [ 'eventInfo', 'personInfo', 'idparams' ],
 	components: {
 		Message,
-		VueRecaptcha
+		VueRecaptcha,
+		VuePhoneNumberInput
 	},
 	created() {
 		this.lang = window.myConfig.lang
+		this.dafaultCountry = this.lang === 'uk' ? 'UA' : this.lang.toUpperCase()
 
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
 		this.warnings.nameMastConsistsLettersOnly = this.$t('message.registrationForm.nameMastConsistsLettersOnly')
@@ -94,6 +125,10 @@ export default {
 		this.warnings.rightPositionName = this.$t('message.registrationForm.rightPositionName')
 		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
 		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
+		this.translations.countrySelectorLabel = this.$t('message.registrationForm.countrySelectorLabel')
+		this.translations.countrySelectorError = this.$t('message.registrationForm.countrySelectorError')
+		this.translations.phoneNumberLabel = this.$t('message.registrationForm.phoneNumberLabel')
+		this.translations.example = this.$t('message.registrationForm.example')
 	},
 	mounted() {
 		// Если есть персональные данные заполнить форму
@@ -106,9 +141,17 @@ export default {
 			this.registrationData.phone = this.personInfo.phone
 		}
 	},
-	updated() {
-	},
 	data: () => ({
+		defaultCountry: 'UA',
+		countriesList: ['UA','RU','BY','KZ','PL'],
+		translations: {
+			countrySelectorLabel: '',
+      countrySelectorError: '',
+      phoneNumberLabel: '',
+      example: ''
+		},
+		hasErrorActive: false,
+		phoneData: {},
 		lang: '',
 		valid: true,
 		lazy: false,
@@ -142,6 +185,10 @@ export default {
 		isSended: false
 	}) ,
 	methods: {
+		phoneUpdate( payload ) {
+			this.phoneData = payload
+			this.registrationData.phone = this.phoneData.formattedNumber
+		},
 		// reCAPTCHA response
 		captchaResponse(recaptchaToken) {
 			this.token = recaptchaToken
@@ -231,13 +278,26 @@ export default {
 		},
 		captchaVerify() {
 			return this.isVerified
+		},
+		phoneIsValid() {
+			return this.phoneData.isValid ? this.phoneData.isValid : false
 		}
 	}
 }
 </script>
 
-<style >
+<style scoped>
 .text-word-wrap {
 	word-break: normal;
+}
+.form-head-message {
+	margin-top: 1em;
+	margin-bottom: 1em; 
+}
+.phoneValid {
+	color: rgba(0, 0, 0, 0.87)
+}
+.phoneNotValid {
+	color: red;
 }
 </style>
