@@ -27,8 +27,6 @@ export default {
 		this.eventGuid = this.$route.params.eventGuid
 		this.personGuid = this.$route.params.personGuid
 
-		// eslint-disable-next-line
-		debugger
 		// выполнить проверку параметров
 		var checkParams = this.checkParams(this.eventGuid, this.personGuid)
 
@@ -61,8 +59,8 @@ export default {
 				return 'noparams'
 			}
 			// проверка корректности
-			var eventGuidIsCorrect = testGuid(eventGuid) // this.testGuid(eventGuid)
-			var personGuidIdCorrect = testGuid(eventGuid) // this.testGuid(eventGuid)
+			var eventGuidIsCorrect = testGuid(eventGuid)
+			var personGuidIdCorrect = testGuid(eventGuid)
 			if (eventGuidIsCorrect && personGuidIdCorrect) {
 				return 'ok'
 			}
@@ -102,10 +100,7 @@ export default {
 				}
 				this.messageTitle = 'Ошибка!'
 			})
-		},
-		// testGuid(guid) {
-		// 	return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
-		// }
+		}
 	}
 }
 </script>

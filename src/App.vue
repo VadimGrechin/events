@@ -29,7 +29,22 @@ export default {
     window.myConfig.lang = lang
   },
   mounted() {
-    document.title = this.$t('windowTitle')
+    var title = ''
+    var routeName = this.$route.name
+    switch (routeName) {
+      case 'registrationknown':
+      case 'registrationnew':
+      case 'noparams':
+        title = this.$t('windowTitle.registration')
+        break
+      case 'goevent':
+        title = this.$t('windowTitle.linkToEvent')
+        break
+      case 'download':
+        title = 'Download'
+        break
+    }
+    document.title = title
   },
 
 	methods: {

@@ -5,7 +5,10 @@ Vue.use(VueI18n)
 
 const	messages = {
 		ru: {
-			windowTitle: 'Регистрация',
+			windowTitle: {
+				registration: 'Регистрация',
+				linkToEvent: 'Подключение к мероприятию'
+			},
 			message: {
 				errorPage: {
 					error: 'Ошибка!!!',
@@ -50,7 +53,11 @@ const	messages = {
 			}
 		},
 		uk: {
-			windowTitle: 'Реєстрація',
+			windowTitle: {
+				registration: 'Реєстрація',
+				linkToEvent: 'Підключення до події'
+			},
+
 			message: {
 				errorPage: {
 					error: 'Помилка!!!',
