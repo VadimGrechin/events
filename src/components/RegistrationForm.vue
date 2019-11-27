@@ -46,15 +46,10 @@
 									:rules="[rules.required(registrationData.position, warnings.obligatoryWriteIn), rules.length100(registrationData.position, warnings.lineHasMore100symbols)]"
 									:label="$t('message.registrationForm.position') + ' *'"></v-text-field>
 
-								<!-- <v-text-field
-									v-model="registrationData.phone"
-									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
-									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field> -->
-
 								<div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
 								<!-- Номер телефона -->
 								<VuePhoneNumberInput 
-									v-model="registrationData.phone"
+									v-model="phoneNumber"
 									size="lg"
 									required
 									color="#FF3907"
@@ -100,6 +95,8 @@ import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
 
+import {getCountryCode, getCountryCodeByPhone, deleteDialCode} from '../helpers/phoneNumber.js'
+
 import VuePhoneNumberInput from 'vue-phone-number-input'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css'
 
@@ -115,7 +112,6 @@ export default {
 	},
 	created() {
 		this.lang = window.myConfig.lang
-		this.dafaultCountry = this.lang === 'uk' ? 'UA' : this.lang.toUpperCase()
 
 		this.warnings.obligatoryWriteIn = this.$t('message.registrationForm.obligatoryWriteIn')
 		this.warnings.nameMastConsistsLettersOnly = this.$t('message.registrationForm.nameMastConsistsLettersOnly')
@@ -125,6 +121,7 @@ export default {
 		this.warnings.rightPositionName = this.$t('message.registrationForm.rightPositionName')
 		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
 		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
+
 		this.translations.countrySelectorLabel = this.$t('message.registrationForm.countrySelectorLabel')
 		this.translations.countrySelectorError = this.$t('message.registrationForm.countrySelectorError')
 		this.translations.phoneNumberLabel = this.$t('message.registrationForm.phoneNumberLabel')
@@ -138,10 +135,20 @@ export default {
 			this.registrationData.email = this.personInfo.email
 			this.registrationData.company = this.personInfo.company
 			this.registrationData.position = this.personInfo.position
-			this.registrationData.phone = this.personInfo.phone
+			// по коду страны номера телефона определить код страны и установить страну по умолчанию
+			//var phoneNumber = '+380445356060'
+			const country = getCountryCodeByPhone(this.personInfo.phone) // getCountryCodeByPhone(phoneNumber)
+			this.defaultCountry = country ? country.iso2 : window.myConfig.defaultCountry
+			// удалить из номера код страны
+			this.phoneNumber = deleteDialCode(this.personInfo.phone, this.defaultCountry) // deleteDialCode(phoneNumber, this.defaultCountry)
+			// eslint-disable-next-line
+			//console.log(this.phoneNumber)
+		} else {
+			getCountryCode(this.setCountry)
 		}
 	},
 	data: () => ({
+		phoneNumber: null,
 		defaultCountry: 'UA',
 		countriesList: ['UA','RU','BY','KZ','PL'],
 		translations: {
@@ -185,6 +192,9 @@ export default {
 		isSended: false
 	}) ,
 	methods: {
+		setCountry(countryCode) {
+			this.defaultCountry = countryCode
+		},
 		phoneUpdate( payload ) {
 			this.phoneData = payload
 			this.registrationData.phone = this.phoneData.formattedNumber
@@ -206,11 +216,9 @@ export default {
 			.catch( error => {
 				if (error.response) {
 						// ответ получен, но ошибка
-						//this.message = 'Status: ' + error.response.status + '\nОшибка: ' + error.response.data
 						this.message = this.$t('message.registrationPage.responsebuterror', {'errorresponsestatus': error.response.status, 'errorresponsedata': error.response.data})
 					} else if (error.request) {
 						// запрос выполнен, но ответ не получен
-						//this.message = 'Ответ от сервера не получен!'
 						this.message = this.$t('message.registrationPage.serverhasnoresponse')
 					} else {
 						this.message = error.message

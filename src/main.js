@@ -5,7 +5,7 @@ import vuetify from './plugins/vuetify';
 
 import Registration from './views/Registration.vue'
 import ErrorPage from './views/ErrorPage.vue'
-import Message from './components/Message.vue'
+//import Message from './components/Message.vue'
 import GoEvent from './components/GoEvent.vue'
 import Download from './components/Download.vue'
 import Ws from './api/webCalculation.js'
@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/registrationform/:eventGuid/:personGuid', 
     name: 'registrationknown',
-    component: Registration
+    component: Registration,
   },
   {
     path: '/registrationform/:eventGuid',
@@ -32,12 +32,12 @@ const routes = [
     name: 'noparams',
     component: Registration
   },
-  {
-    path: '/registrationform/message/:message',
-    name: 'message',
-    component: Message,
-    props: true
-  },
+  // {
+  //   path: '/registrationform/message/:message',
+  //   name: 'message',
+  //   component: Message,
+  //   props: true
+  // },
   {
     path: '/goevent/:eventGuid/:personGuid?',
     name: 'goevent',

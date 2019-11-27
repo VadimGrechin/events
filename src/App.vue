@@ -46,7 +46,6 @@ export default {
     }
     document.title = title
   },
-
 	methods: {
 	}
 };
