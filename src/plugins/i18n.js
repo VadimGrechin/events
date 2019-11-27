@@ -5,6 +5,7 @@ Vue.use(VueI18n)
 
 const	messages = {
 		ru: {
+			windowTitle: 'Регистрация',
 			message: {
 				errorPage: {
 					error: 'Ошибка!!!',
@@ -49,6 +50,7 @@ const	messages = {
 			}
 		},
 		uk: {
+			windowTitle: 'Реєстрація',
 			message: {
 				errorPage: {
 					error: 'Помилка!!!',

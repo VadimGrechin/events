@@ -29,9 +29,7 @@ export default {
     window.myConfig.lang = lang
   },
   mounted() {
-    if ( window.myConfig.lang === 'uk' ) {
-      window.title = 'Реєстрація'
-    }
+    document.title = this.$t('windowTitle')
   },
 
 	methods: {

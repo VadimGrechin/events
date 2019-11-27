@@ -110,7 +110,7 @@ export default {
 				return 'noparams'
 			}
 			if (params.eventid && !params.personid) {
-				eventidIsCorrect = testGuid(params.eventid) //this.testGuid(params.eventid)
+				eventidIsCorrect = testGuid(params.eventid)
 				if (eventidIsCorrect) {
 					return 'nosecondparams'
 				} else {
@@ -118,8 +118,8 @@ export default {
 				}
 			}
 			
-			eventidIsCorrect = testGuid(params.eventid) //this.testGuid(params.eventid)
-			personidIsCorrect = testGuid(params.personid) //this.testGuid(params.personid)
+			eventidIsCorrect = testGuid(params.eventid)
+			personidIsCorrect = testGuid(params.personid)
 			
 			if (!eventidIsCorrect && !personidIsCorrect) {
 				return 'bothparamsnotcorrect'
@@ -132,9 +132,6 @@ export default {
 			}
 			return 'ok'
 		},
-		// testGuid(guid) {
-		// 	return /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i.test(guid)
-		// },
 		// Получить информция о событии _REGFORM.GETEVENTINFO
 		getEventInfo(eventid, lang) {
 			axios.post(window.myConfig.WsUrl, {
