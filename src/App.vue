@@ -41,12 +41,11 @@ export default {
         title = this.$t('windowTitle.linkToEvent')
         break
       case 'download':
-        title = 'Download'
+        title = this.$t('windowTitle.downloadFile')
         break
     }
     document.title = title
   },
-
 	methods: {
 	}
 };

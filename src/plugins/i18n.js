@@ -7,7 +7,8 @@ const	messages = {
 		ru: {
 			windowTitle: {
 				registration: 'Регистрация',
-				linkToEvent: 'Подключение к мероприятию'
+				linkToEvent: 'Подключение к мероприятию',
+				downloadFile: 'Загрузка файла'
 			},
 			message: {
 				errorPage: {
@@ -55,9 +56,9 @@ const	messages = {
 		uk: {
 			windowTitle: {
 				registration: 'Реєстрація',
-				linkToEvent: 'Підключення до події'
+				linkToEvent: 'Підключення до події',
+				downloadFile: 'Завантаження файлу'
 			},
-
 			message: {
 				errorPage: {
 					error: 'Помилка!!!',
