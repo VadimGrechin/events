@@ -29,9 +29,22 @@ export default {
     window.myConfig.lang = lang
   },
   mounted() {
-    if ( window.myConfig.lang === 'uk' ) {
-      window.title = 'Реєстрація'
+    var title = ''
+    var routeName = this.$route.name
+    switch (routeName) {
+      case 'registrationknown':
+      case 'registrationnew':
+      case 'noparams':
+        title = this.$t('windowTitle.registration')
+        break
+      case 'goevent':
+        title = this.$t('windowTitle.linkToEvent')
+        break
+      case 'download':
+        title = this.$t('windowTitle.downloadFile')
+        break
     }
+    document.title = title
   },
 
 	methods: {
