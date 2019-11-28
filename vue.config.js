@@ -3,7 +3,7 @@ module.exports = {
   configureWebpack: {
     devtool: 'souce-map'
   },
-  publicPath: process.env.NODE_ENV === 'production' ? '/registration/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/event/' : '/',
   "transpileDependencies": [
     "vuetify"
   ]
