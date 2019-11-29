@@ -51,18 +51,6 @@
 									v-model="registrationData.phone"
 									:rules="[rules.required(registrationData.phone, warnings.obligatoryWriteIn), rules.phone(registrationData.phone, warnings.rightPhoneNumber)]"
 									:label="$t('message.registrationForm.phone') + ' *'"></v-text-field>
-								
-								<!-- <div v-bind:class="{phoneValid: phoneIsValid, phoneNotValid: !phoneIsValid }">{{$t('message.registrationForm.phone') + ' *'}}</div>
-								<VuePhoneNumberInput 
-									v-model="phoneNumber"
-									size="lg"
-									required
-									color="#FF3907"
-									:default-country-code="defaultCountry"
-									:only-countries="countriesList"
-									:error="hasErrorActive"
-									:translations="translations"
-									@update="phoneUpdate" /> -->
 
 								<!-- Согласие на использование данных -->
 								<v-checkbox
@@ -81,7 +69,6 @@
 										:disabled="!(valid && isConsent && captchaVerify)"
 										color="success"
 										@click="registrate">{{$t('message.registrationForm.registrate')}}</v-btn>
-								<!-- :disabled="!(valid && isConsent && phoneIsValid && captchaVerify)" -->
 
 							</v-form>
 						</v-flex>
@@ -96,25 +83,16 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import axios from 'axios'
 import Message from '../components/Message'
 import VueRecaptcha from 'vue-recaptcha'
-
-// import {getCountryCode, getCountryCodeByPhone, deleteDialCode} from '../helpers/phoneNumber.js'
-
-// import VuePhoneNumberInput from 'vue-phone-number-input'
-// import 'vue-phone-number-input/dist/vue-phone-number-input.css'
-
-// Vue.component('vue-phone-number-input', VuePhoneNumberInput)
 
 export default {
 	name: 'registration-form',
 	props: [ 'eventInfo', 'personInfo', 'idparams' ],
 	components: {
 		Message,
-		VueRecaptcha,
-		//VuePhoneNumberInput
+		VueRecaptcha
 	},
 	created() {
 		this.lang = window.myConfig.lang
@@ -128,10 +106,6 @@ export default {
 		this.warnings.lineHasMore50symbols = this.$t('message.registrationForm.lineHasMore50symbols')
 		this.warnings.lineHasMore100symbols = this.$t('message.registrationForm.lineHasMore100symbols')
 
-		this.translations.countrySelectorLabel = this.$t('message.registrationForm.countrySelectorLabel')
-		this.translations.countrySelectorError = this.$t('message.registrationForm.countrySelectorError')
-		this.translations.phoneNumberLabel = this.$t('message.registrationForm.phoneNumberLabel')
-		this.translations.example = this.$t('message.registrationForm.example')
 	},
 	mounted() {
 		// Если есть персональные данные заполнить форму
@@ -142,28 +116,9 @@ export default {
 			this.registrationData.company = this.personInfo.company
 			this.registrationData.position = this.personInfo.position
 			this.registrationData.phone = this.personInfo.phone
-			// по коду страны номера телефона определить код страны и установить страну по умолчанию
-			// const country = getCountryCodeByPhone(this.personInfo.phone) // getCountryCodeByPhone(phoneNumber)
-			// this.defaultCountry = country ? country.iso2 : window.myConfig.defaultCountry
-			// // удалить из номера код страны
-			// this.phoneNumber = deleteDialCode(this.personInfo.phone, this.defaultCountry) // deleteDialCode(phoneNumber, this.defaultCountry)
 		} 
-		// else {
-		// 	getCountryCode(this.setCountry)
-		// }
 	},
 	data: () => ({
-		//phoneNumber: null,
-		// defaultCountry: 'UA',
-		// countriesList: ['UA','RU','BY','KZ','PL'],
-		// translations: {
-		// 	countrySelectorLabel: '',
-    //   countrySelectorError: '',
-    //   phoneNumberLabel: '',
-    //   example: ''
-		// },
-		// hasErrorActive: false,
-		// phoneData: {},
 		lang: '',
 		valid: true,
 		lazy: false,
@@ -197,13 +152,6 @@ export default {
 		isSended: false
 	}) ,
 	methods: {
-		setCountry(countryCode) {
-			this.defaultCountry = countryCode
-		},
-		// phoneUpdate( payload ) {
-		// 	this.phoneData = payload
-		// 	this.registrationData.phone = this.phoneData.formattedNumber
-		// },
 		// reCAPTCHA response
 		captchaResponse(recaptchaToken) {
 			this.token = recaptchaToken
@@ -291,10 +239,7 @@ export default {
 		},
 		captchaVerify() {
 			return this.isVerified
-		},
-		// phoneIsValid() {
-		// 	return this.phoneData.isValid ? this.phoneData.isValid : false
-		// }
+		}
 	}
 }
 </script>
